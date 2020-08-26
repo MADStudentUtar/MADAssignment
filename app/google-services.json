@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "170563428599",
+    "firebase_url": "https://karaokie-7aaa8.firebaseio.com",
+    "project_id": "karaokie-7aaa8",
+    "storage_bucket": "karaokie-7aaa8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:170563428599:android:486f166abdb15df3b7b3f2",
+        "android_client_info": {
+          "package_name": "utar.edu.mad"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "170563428599-0vii4i1kdutn1u8q8c17fcr09dfb345n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "utar.edu.mad",
+            "certificate_hash": "a36b9fc1d076358666b7038d43cfee650fe022dd"
+          }
+        },
+        {
+          "client_id": "170563428599-4546ffnh257kcoetq40thpgbumksaqbr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAUYYbsUw8Vzni-dCCEW544JypR0gcJ-pQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "170563428599-4546ffnh257kcoetq40thpgbumksaqbr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

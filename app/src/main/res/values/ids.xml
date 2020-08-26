@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="loginbackground" type="id"/>
+    <item name="textview01" type="id"/>
+    <item name="keypadfield1" type="id"/>
+    <item name="keypadtext1" type="id"/>
+    <item name="keypadtext2" type="id"/>
+    <item name="keypadbutton1" type="id"/>
+    <item name="keypadfield2" type="id"/>
+</resources>
