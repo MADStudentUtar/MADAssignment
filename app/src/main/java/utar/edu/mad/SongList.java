@@ -96,7 +96,7 @@ public class SongList extends AppCompatActivity {
         //Bottom navigation bar
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
 
-        //Set home page selected
+        //Set bottom navigation selected button
         bottomNavigationView.setSelectedItemId(R.id.songList);
 
         //Perform ItemSelectedListener in Navigation Bar
@@ -123,6 +123,13 @@ public class SongList extends AppCompatActivity {
                 return false;
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
+        bottomNavigationView.setSelectedItemId(R.id.songList);
     }
 
     class MyAdapter extends ArrayAdapter<String> {
