@@ -11,6 +11,9 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 public class SplashScreen extends AppCompatActivity {
 
     private static int timer = 5000;
@@ -37,11 +40,18 @@ public class SplashScreen extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-                Intent intent = new Intent(SplashScreen.this, SongList.class);
-                startActivity(intent);
-                finish();
-
+                if (currentUser == null)
+                {
+                    Intent intent = new Intent(SplashScreen.this,login.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Intent intent = new Intent(SplashScreen.this, SongList.class);
+                    startActivity(intent);
+                    finish();
+                }
             }
         }, timer);
     }

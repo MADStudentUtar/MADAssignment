@@ -1,6 +1,7 @@
 package utar.edu.mad;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -95,7 +96,7 @@ public class SongList extends AppCompatActivity {
         //Bottom navigation bar
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
 
-        //Set home page selected
+        //Set bottom navigation selected button
         bottomNavigationView.setSelectedItemId(R.id.songList);
 
         //Perform ItemSelectedListener in Navigation Bar
@@ -116,11 +117,18 @@ public class SongList extends AppCompatActivity {
                     case R.id.profile:
 //                        startActivity(new Intent(getApplicationContext(), ));
 //                        overridePendingTransition(0,0);
-//                        return true;
+                        return true;
                 }
                 return false;
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
+        bottomNavigationView.setSelectedItemId(R.id.songList);
     }
 
     class MyAdapter extends ArrayAdapter<String> {
