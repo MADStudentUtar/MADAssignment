@@ -109,14 +109,15 @@ public class SongList extends AppCompatActivity {
                     case R.id.friendList:
 //                        startActivity(new Intent(getApplicationContext(), ));
 //                        overridePendingTransition(0,0);
-//                        return true;
+                        return true;
                     case R.id.chat:
 //                        startActivity(new Intent(getApplicationContext(), ));
 //                        overridePendingTransition(0,0);
-//                        return true;
+                        return true;
                     case R.id.profile:
-//                        startActivity(new Intent(getApplicationContext(), ));
-//                        overridePendingTransition(0,0);
+                        startActivity(new Intent(SongList.this, Profile.class));
+                        overridePendingTransition(0,0);
+                        finish();
                         return true;
                 }
                 return false;
