@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">MAD</string>
+    <string name="song">Song</string>
+    <string name="friends">Friends</string>
+    <string name="chat">Chat</string>
+    <string name="profile">Profile</string>
+    <string name="title">Title</string>
+    <string name="sub_title">Sub Title</string>
+    <string name="todo">TODO</string>
+    <string name="desc">f r o m\nT E A M M A D</string>
+    <string name="song_list">Song List</string>
 </resources>

@@ -11,8 +11,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Profile">
-
+		
+        <activity android:name=".SongList"/>
+        <activity android:name=".SplashScreen" 
+		android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+		<activity android:name=".Profile">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -26,8 +29,7 @@
             android:theme="@style/Login" />
         <activity
             android:name=".MainActivity"
-            android:theme="@style/Login">
-        </activity>
+            android:theme="@style/Login"/>
     </application>
 
 </manifest>
