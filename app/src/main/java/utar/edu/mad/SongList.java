@@ -96,7 +96,7 @@ public class SongList extends AppCompatActivity {
         //Bottom navigation bar
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
 
-        //Set bottom navigation selected button
+        //Set bottom navigation selected button for the page
         bottomNavigationView.setSelectedItemId(R.id.songList);
 
         //Perform ItemSelectedListener in Navigation Bar
