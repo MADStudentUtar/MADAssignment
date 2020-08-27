@@ -109,7 +109,7 @@ public class SongList extends AppCompatActivity {
                     case R.id.friendList:
 //                        startActivity(new Intent(getApplicationContext(), ));
 //                        overridePendingTransition(0,0);
-                        return true;
+//                        return true;
                     case R.id.chat:
 //                        startActivity(new Intent(getApplicationContext(), ));
 //                        overridePendingTransition(0,0);
@@ -125,12 +125,12 @@ public class SongList extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
-        bottomNavigationView.setSelectedItemId(R.id.songList);
-    }
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
+//        bottomNavigationView.setSelectedItemId(R.id.songList);
+//    }
 
     class MyAdapter extends ArrayAdapter<String> {
         Context context;
