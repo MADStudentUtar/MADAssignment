@@ -1,16 +1,24 @@
 package utar.edu.mad;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.InputStream;
 
@@ -65,9 +73,52 @@ public class Profile extends AppCompatActivity {
 
         //Display user details
         usernameTV.setText(username);
-        bioTV.setText(bio);
+        bioTV.setText("My name is Chai Wan Xin, Let's sing! I am a programmer with no life by the way. what are your interest? Let me know! I am happy to know new friends");
         birthDateTV.setText(birthDate);
         favouriteSongTV.setText(favouriteSong);
+
+
+        //Setting Button OnClickListener
+        FloatingActionButton settingButton = (FloatingActionButton) findViewById(R.id.settingButton);
+        settingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Profile.this, MainActivity.class));
+            }
+        });
+
+
+
+        //Bottom navigation bar
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
+
+        //Set home page selected
+        bottomNavigationView.setSelectedItemId(R.id.profile);
+
+        //Perform ItemSelectedListener in Navigation Bar
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.songList:
+                        startActivity(new Intent(Profile.this, SongList.class));
+                        overridePendingTransition(0,0);
+                        finish();
+                        return true;
+                    case R.id.friendList:
+//                        startActivity(new Intent(getApplicationContext(), ));
+//                        overridePendingTransition(0,0);
+//                        return true;
+                    case R.id.chat:
+//                        startActivity(new Intent(getApplicationContext(), ));
+//                        overridePendingTransition(0,0);
+//                        return true;
+                    case R.id.profile:
+                        return true;
+                }
+                return false;
+            }
+        });
     }
 
     //Load the image using URL

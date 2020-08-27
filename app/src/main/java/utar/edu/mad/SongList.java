@@ -1,6 +1,7 @@
 package utar.edu.mad;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -108,15 +109,16 @@ public class SongList extends AppCompatActivity {
                     case R.id.friendList:
 //                        startActivity(new Intent(getApplicationContext(), ));
 //                        overridePendingTransition(0,0);
-//                        return true;
+                        return true;
                     case R.id.chat:
 //                        startActivity(new Intent(getApplicationContext(), ));
 //                        overridePendingTransition(0,0);
-//                        return true;
+                        return true;
                     case R.id.profile:
-//                        startActivity(new Intent(getApplicationContext(), ));
-//                        overridePendingTransition(0,0);
-//                        return true;
+                        startActivity(new Intent(SongList.this, Profile.class));
+                        overridePendingTransition(0,0);
+                        finish();
+                        return true;
                 }
                 return false;
             }

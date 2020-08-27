@@ -10,7 +10,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0sp"
-        android:layout_weight="0.35">
+        android:layout_weight="0.4">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -66,7 +66,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.65"
+        android:layout_weight="0.6"
         android:orientation="vertical"
         android:paddingLeft="12sp"
         android:paddingRight="12sp"
@@ -184,15 +184,26 @@
                 android:textSize="18sp" />
         </LinearLayout>
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10sp"
+        android:clipToPadding="false"
+        android:gravity="center_vertical">
+
         <LinearLayout
             android:id="@+id/recordedButton"
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20sp"
+            android:layout_weight="1"
+            android:layout_marginRight="20sp"
             android:gravity="center"
             android:orientation="horizontal"
             android:background="@drawable/button"
-            android:padding="5sp">
+            android:elevation="6sp"
+            android:padding="8sp">
 
             <ImageView
                 android:layout_width="30sp"
@@ -208,30 +219,26 @@
 
         </LinearLayout>
 
-        <LinearLayout
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/settingButton"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20sp"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:background="@drawable/button"
-            android:padding="5sp">
-
-            <ImageView
-                android:layout_width="30sp"
-                android:layout_height="30sp"
-                android:layout_marginRight="10sp"
-                android:src="@drawable/settings" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:text="Settings" />
-
-        </LinearLayout>
+            android:layout_gravity="right"
+            android:src="@drawable/setting"
+            app:backgroundTint="@color/colorThemeDark"
+            app:elevation="6sp"
+            app:fabSize="normal" />
 
     </LinearLayout>
 
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_nav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="0dp"
+        android:layout_marginRight="0dp"
+        app:backgroundTint="@color/colorTheme"
+        app:itemIconTint="@drawable/selector"
+        app:itemTextColor="@drawable/selector"
+        app:menu="@menu/menu_navigation" />
 </LinearLayout>
