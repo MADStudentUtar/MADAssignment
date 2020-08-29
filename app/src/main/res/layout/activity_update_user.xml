@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@drawable/loginback"
+    tools:context=".UpdateUser">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Edit Profile"
+        android:textColor="@android:color/white"
+        android:textSize="35sp"
+        android:textAlignment="center"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="40dp"
+        android:layout_marginTop="40dp" />
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select new photo or let older one as profile picture"
+        android:textColor="@android:color/white"
+        android:layout_marginBottom="10dp"/>
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        app:cardPreventCornerOverlap="false"
+        app:cardCornerRadius="75dp"
+        android:layout_marginBottom="7dp">
+
+        <ImageView
+            android:id="@+id/iv_uu"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:onClick="ChooseImage"
+            android:scaleType="fitCenter" />
+    </androidx.cardview.widget.CardView>
+
+    <EditText
+        android:layout_width="380dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@android:color/white"
+        android:hint="Username"
+        android:inputType="text"
+        android:textColor="@android:color/white"
+        android:textColorHint="@android:color/white"
+        android:layout_margin="4dp"
+        android:id="@+id/et_name_uu"
+        android:drawableLeft="@drawable/ic_baseline_person_24"
+        android:drawableTint="@android:color/white"
+        android:paddingLeft="5dp"
+        android:drawablePadding="5dp"/>
+
+    <EditText
+        android:layout_width="380dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@android:color/white"
+        android:hint="Bio"
+        android:inputType="text"
+        android:textColor="@android:color/white"
+        android:textColorHint="@android:color/white"
+        android:layout_margin="4dp"
+        android:id="@+id/et_bio_uu"
+        android:drawableLeft="@drawable/ic_bio_24"
+        android:drawableTint="@android:color/white"
+        android:paddingLeft="5dp"
+        android:drawablePadding="5dp"/>
+    <EditText
+        android:layout_width="380dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@android:color/white"
+        android:hint="Birth Date"
+        android:inputType="text"
+        android:textColor="@android:color/white"
+        android:textColorHint="@android:color/white"
+        android:layout_margin="4dp"
+        android:id="@+id/et_birthdate_uu"
+        android:drawableLeft="@drawable/ic_birthdaycake_24"
+        android:drawableTint="@android:color/white"
+        android:paddingLeft="5dp"
+        android:drawablePadding="5dp"/>
+    <EditText
+        android:layout_width="380dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@android:color/white"
+        android:hint="Favourite Song"
+        android:inputType="text"
+        android:textColor="@android:color/white"
+        android:textColorHint="@android:color/white"
+        android:layout_margin="4dp"
+        android:id="@+id/et_favouritesong_uu"
+        android:drawableLeft="@drawable/ic_baseline_music_note_24"
+        android:drawableTint="@android:color/white"
+        android:paddingLeft="5dp"
+        android:drawablePadding="5dp"/>
+
+    <Button
+        android:id="@+id/btn_uu"
+        android:layout_width="380dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:background="#0076FF"
+        android:text="Save Profile"
+        android:textColor="@android:color/white" />
+
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressbar_uu"
+        android:indeterminateTint="@android:color/white"
+        android:indeterminate="true"
+        android:layout_marginTop="17dp"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:visibility="invisible"/>
+
+
+</LinearLayout>

@@ -19,10 +19,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SongList extends AppCompatActivity {
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    DocumentReference documentReference;
 
     SearchView searchView;
     ListView listView;
@@ -36,6 +43,8 @@ public class SongList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_song_list);
+
+        documentReference = db.collection("user").document("profile");
 
         //list view
         listView = findViewById(R.id.lists);
@@ -115,14 +124,27 @@ public class SongList extends AppCompatActivity {
 //                        overridePendingTransition(0,0);
                         return true;
                     case R.id.profile:
-                        startActivity(new Intent(SongList.this, Profile.class));
-                        overridePendingTransition(0,0);
-                        finish();
+                        ShowProfile();
                         return true;
                 }
                 return false;
             }
         });
+    }
+    public void ShowProfile(){
+        documentReference.get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if(task.getResult().exists()){
+                            Intent intent = new Intent(SongList.this,ShowProfile.class);
+                            startActivity(intent);
+                        }else {
+                            Intent intent = new Intent(SongList.this,CreateProfile.class);
+                            startActivity(intent);
+                        }
+                    }
+                });
     }
 
 //    @Override
