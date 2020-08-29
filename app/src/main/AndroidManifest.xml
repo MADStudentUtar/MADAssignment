@@ -22,15 +22,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Profile" />
         <activity
             android:name=".Register"
             android:theme="@style/Login" />
         <activity
             android:name=".login"
-            android:theme="@style/Login" />
-        <activity
-            android:name=".MainActivity"
             android:theme="@style/Login" />
     </application>
 

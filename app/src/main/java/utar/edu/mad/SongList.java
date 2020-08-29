@@ -147,12 +147,12 @@ public class SongList extends AppCompatActivity {
                 });
     }
 
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
-//        bottomNavigationView.setSelectedItemId(R.id.songList);
-//    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
+        bottomNavigationView.setSelectedItemId(R.id.songList);
+    }
 
     class MyAdapter extends ArrayAdapter<String> {
         Context context;
@@ -166,7 +166,6 @@ public class SongList extends AppCompatActivity {
             this.rTitle = title;
             this.rName = name;
             this.rImage = img;
-
         }
 
         @NonNull

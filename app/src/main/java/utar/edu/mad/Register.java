@@ -107,7 +107,7 @@ public class Register extends AppCompatActivity {
 
     }
     private void sendtoMain(){
-        Intent intent = new Intent(Register.this,MainActivity.class);
+        Intent intent = new Intent(Register.this,SongList.class);
         startActivity(intent);
         finish();
     }

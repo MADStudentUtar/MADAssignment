@@ -101,7 +101,7 @@ public class CreateProfile extends AppCompatActivity {
         final String birthdate = et_birthdate.getText().toString();
         final String favouritesong = et_favouritesong.getText().toString();
 
-        if(!TextUtils.isEmpty(name) ||!TextUtils.isEmpty(bio) ||!TextUtils.isEmpty(birthdate) ||!TextUtils.isEmpty(favouritesong) || imageUri != null){
+        if(!TextUtils.isEmpty(name) &&!TextUtils.isEmpty(bio) &&!TextUtils.isEmpty(birthdate) &&!TextUtils.isEmpty(favouritesong) && imageUri != null){
             progressBar.setVisibility(View.VISIBLE);
             final StorageReference reference = storageReference.child(System.currentTimeMillis()+"."+getFileExt(imageUri));
 
