@@ -1,16 +1,17 @@
 package utar.edu.mad;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.Manifest;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.karumi.dexter.Dexter;
@@ -51,17 +52,19 @@ public class Friend extends AppCompatActivity {
                     case R.id.friendList:
                         return true;
                     case R.id.songList:
-//                        startActivity(new Intent(getApplicationContext(), ));
-//                        overridePendingTransition(0,0);
-//                        return true;
+                        startActivity(new Intent(Friend.this, SongList.class));
+                        overridePendingTransition(0,0);
+                        finish();
+                        return true;
                     case R.id.chat:
-//                        startActivity(new Intent(getApplicationContext(), ));
+//                        startActivity(new Intent(Friend.this, Chat.class));
 //                        overridePendingTransition(0,0);
-//                        return true;
+                        return true;
                     case R.id.profile:
-//                        startActivity(new Intent(getApplicationContext(), ));
-//                        overridePendingTransition(0,0);
-//                        return true;
+                        startActivity(new Intent(Friend.this, ShowProfile.class));
+                        overridePendingTransition(0,0);
+                        finish();
+                        return true;
                 }
                 return false;
             }

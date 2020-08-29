@@ -1,10 +1,11 @@
 package utar.edu.mad;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -29,17 +30,20 @@ public class Chat extends AppCompatActivity {
                     case R.id.chat:
                         return true;
                     case R.id.songList:
-//                        startActivity(new Intent(getApplicationContext(), ));
-//                        overridePendingTransition(0,0);
-//                        return true;
+                        startActivity(new Intent(Chat.this, SongList.class));
+                        overridePendingTransition(0,0);
+                        finish();
+                        return true;
                     case R.id.friendList:
-//                        startActivity(new Intent(getApplicationContext(), ));
-//                        overridePendingTransition(0,0);
-//                        return true;
+                        startActivity(new Intent(Chat.this, Friend.class));
+                        overridePendingTransition(0,0);
+                        finish();
+                        return true;
                     case R.id.profile:
-//                        startActivity(new Intent(getApplicationContext(), ));
-//                        overridePendingTransition(0,0);
-//                        return true;
+                        startActivity(new Intent(Chat.this, ShowProfile.class));
+                        overridePendingTransition(0,0);
+                        finish();
+                        return true;
                 }
                 return false;
             }

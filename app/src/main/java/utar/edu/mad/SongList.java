@@ -11,13 +11,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-import androidx.appcompat.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -116,9 +116,10 @@ public class SongList extends AppCompatActivity {
                     case R.id.songList:
                         return true;
                     case R.id.friendList:
-//                        startActivity(new Intent(getApplicationContext(), ));
-//                        overridePendingTransition(0,0);
-//                        return true;
+                        startActivity(new Intent(SongList.this, Friend.class));
+                        overridePendingTransition(0,0);
+                        finish();
+                        return true;
                     case R.id.chat:
 //                        startActivity(new Intent(getApplicationContext(), ));
 //                        overridePendingTransition(0,0);
