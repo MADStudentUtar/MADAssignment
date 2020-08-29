@@ -22,6 +22,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -48,6 +49,8 @@ public class UpdateUser extends AppCompatActivity {
     DocumentReference documentReference;
     ImageView imageView;
 
+    String currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +64,7 @@ public class UpdateUser extends AppCompatActivity {
         progressBar = findViewById(R.id.progressbar_uu);
         imageView = findViewById(R.id.iv_uu);
 
-        documentReference = db.collection("user").document("profile");
+        documentReference = db.collection("user").document(currentUserID).collection("profile").document("profile_details");
         storageReference = firebaseStorage.getInstance().getReference("profile images");
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -121,7 +124,7 @@ public class UpdateUser extends AppCompatActivity {
                         public void onComplete(@NonNull Task<Uri> task) {
                             if(task.isSuccessful()){
                                 final Uri downloadUri = task.getResult();
-                                final DocumentReference sfDocRef = db.collection("user").document("profile");
+                                final DocumentReference sfDocRef = db.collection("user").document(currentUserID).collection("profile").document("profile_details");
 
                                 db.runTransaction(new Transaction.Function<Void>() {
                                     @Override
@@ -165,7 +168,7 @@ public class UpdateUser extends AppCompatActivity {
                         }
                     });
         }else {
-            final DocumentReference sfDocRef = db.collection("user").document("profile");
+            final DocumentReference sfDocRef = db.collection("user").document(currentUserID).collection("profile").document("profile_details");
 
             db.runTransaction(new Transaction.Function<Void>() {
                 @Override
