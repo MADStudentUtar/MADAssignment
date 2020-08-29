@@ -22,7 +22,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -43,6 +45,7 @@ public class CreateProfile extends AppCompatActivity {
     UploadTask uploadTask;
     FirebaseStorage firebaseStorage;
     StorageReference storageReference;
+    String currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     DocumentReference documentReference;
     ImageView imageView;
@@ -61,7 +64,7 @@ public class CreateProfile extends AppCompatActivity {
         progressBar = findViewById(R.id.progressbar_cp);
         imageView = findViewById(R.id.iv_cp);
 
-        documentReference = db.collection("user").document("profile");
+        documentReference = db.collection("user").document(currentUserID).collection("profile").document("profile_details");
         storageReference = firebaseStorage.getInstance().getReference("profile images");
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -121,14 +124,14 @@ public class CreateProfile extends AppCompatActivity {
                         public void onComplete(@NonNull Task<Uri> task) {
                             if(task.isSuccessful()){
                                 Uri downloadUri = task.getResult();
-                                Map<String, String> profile = new HashMap<>();
-                                profile.put("name",name);
-                                profile.put("bio",bio);
-                                profile.put("birthdate",birthdate);
-                                profile.put("favouritesong",favouritesong);
-                                profile.put("url",downloadUri.toString());
+                                Map<String, String> profile_details = new HashMap<>();
+                                profile_details.put("name",name);
+                                profile_details.put("bio",bio);
+                                profile_details.put("birthdate",birthdate);
+                                profile_details.put("favouritesong",favouritesong);
+                                profile_details.put("url",downloadUri.toString());
 
-                                documentReference.set(profile)
+                                documentReference.set(profile_details)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {

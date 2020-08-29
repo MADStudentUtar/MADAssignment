@@ -23,6 +23,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -38,13 +39,15 @@ public class SongList extends AppCompatActivity {
     String mSinger[] = {"BlackPink", "Bruno Mars", "Jay Chou", "Shawn Mendes", "JJ Lin"};
     int images[] = {R.drawable.blackpink, R.drawable.brunomars, R.drawable.jaychou, R.drawable.shawn, R.drawable.jjlin};
 
+    String currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_song_list);
 
-        documentReference = db.collection("user").document("profile");
+        documentReference = db.collection("user").document(currentUserID).collection("profile").document("profile_details");
 
         //list view
         listView = findViewById(R.id.lists);

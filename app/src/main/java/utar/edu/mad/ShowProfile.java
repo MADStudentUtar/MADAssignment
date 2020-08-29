@@ -37,6 +37,8 @@ public class ShowProfile extends AppCompatActivity {
     FloatingActionButton floatingActionButton;
     private FirebaseAuth mAuth;
 
+    String currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
 
 
 
@@ -47,7 +49,7 @@ public class ShowProfile extends AppCompatActivity {
 
         floatingActionButton = findViewById(R.id.floatingbtn_sp);
         imageView = findViewById(R.id.imageView_sp);
-        documentReference = db.collection("user").document("profile");
+        documentReference = db.collection("user").document(currentUserID).collection("profile").document("profile_details");
         storageReference = firebaseStorage.getInstance().getReference("profile images");
 
         nameEt = findViewById(R.id.name_tv_sp);
