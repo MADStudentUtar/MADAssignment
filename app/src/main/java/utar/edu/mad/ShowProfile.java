@@ -1,8 +1,5 @@
 package utar.edu.mad;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -11,6 +8,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -95,9 +95,10 @@ public class ShowProfile extends AppCompatActivity {
                         finish();
                         return true;
                     case R.id.friendList:
-//                        startActivity(new Intent(getApplicationContext(), ));
-//                        overridePendingTransition(0,0);
-//                        return true;
+                        startActivity(new Intent(ShowProfile.this, Friend.class));
+                        overridePendingTransition(0,0);
+                        finish();
+                        return true;
                     case R.id.chat:
 //                        startActivity(new Intent(getApplicationContext(), ));
 //                        overridePendingTransition(0,0);
