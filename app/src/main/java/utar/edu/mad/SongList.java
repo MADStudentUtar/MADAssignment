@@ -1,24 +1,18 @@
 package utar.edu.mad;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -27,17 +21,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
-public class SongList extends AppCompatActivity {
+public class SongList extends AppCompatActivity implements FirestoreAdapter.OnListItemClick {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     DocumentReference documentReference;
+    Button searchBtn;
 
-    SearchView searchView;
-    ListView listView;
-    MyAdapter adapter;
-    String mTitle[] = {"How You Like That", "Just The Way You Are", "Mojito", "Senorita", "Tales of the Red Cliff"};
-    String mSinger[] = {"BlackPink", "Bruno Mars", "Jay Chou", "Shawn Mendes", "JJ Lin"};
-    int images[] = {R.drawable.blackpink, R.drawable.brunomars, R.drawable.jaychou, R.drawable.shawn, R.drawable.jjlin};
+    private RecyclerView firestoreList;
+    private FirestoreAdapter adapter;
 
     String currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -47,54 +39,24 @@ public class SongList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_song_list);
 
+        firestoreList = findViewById(R.id.firestore_list);
+
         documentReference = db.collection("user").document(currentUserID).collection("profile").document("profile_details");
 
-        //list view
-        listView = findViewById(R.id.lists);
+        //Query songs from firebase
+        Query querySong = db.collection("user").document(currentUserID).collection("songs");
 
-        adapter = new MyAdapter(this, mTitle,mSinger,images);
-        listView.setAdapter(adapter);
+        //RecyclerOptions
+        FirestoreRecyclerOptions<SongModel> options = new FirestoreRecyclerOptions.Builder<SongModel>()
+                .setQuery(querySong, SongModel.class)
+                .build();
+        adapter = new FirestoreAdapter(options,this);
+        firestoreList.setHasFixedSize(true);
+        firestoreList.setLayoutManager(new LinearLayoutManager(this));
+        firestoreList.setAdapter(adapter);
 
-        //set item click on list view
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 0){
-                    Toast.makeText(SongList.this, "BlackPink", Toast.LENGTH_SHORT).show();
-                }
-                if (position == 1){
-                    Toast.makeText(SongList.this, "Bruno Mars", Toast.LENGTH_SHORT).show();
-                }
-                if (position == 2){
-                    Toast.makeText(SongList.this, "Jay Chou", Toast.LENGTH_SHORT).show();
-                }
-                if (position == 3){
-                    Toast.makeText(SongList.this, "Shawn Mendes", Toast.LENGTH_SHORT).show();
-                }
-                if (position == 4){
-                    Toast.makeText(SongList.this, "JJ Lin", Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        });
-
-        //search view
-        searchView = (SearchView) findViewById(R.id.searchSong);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                SongList.this.adapter.getFilter().filter(s);
-                adapter.notifyDataSetChanged();
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                SongList.this.adapter.getFilter().filter(s);
-                adapter.notifyDataSetChanged();
-                return false;
-            }
-        });
+        //search button
+        searchBtn = findViewById(R.id.searchBtn);
 
         //floating upload button
         FloatingActionButton fab = findViewById(R.id.btn);
@@ -151,42 +113,27 @@ public class SongList extends AppCompatActivity {
                 });
     }
 
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+        adapter.stopListening();
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
+        adapter.startListening();
+        //change bottom navigation to song
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
         bottomNavigationView.setSelectedItemId(R.id.songList);
     }
 
-    class MyAdapter extends ArrayAdapter<String> {
-        Context context;
-        String rTitle[];
-        String rName[];
-        int rImage[];
+    // click on the item on recyclerView
+    @Override
+    public void onItemClick(DocumentSnapshot snapshot, int position) {
+        Log.d("ITEM_CLICK", "Clicked an item:" + position);
+        Log.d("Reference", String.valueOf(snapshot.getData()));
 
-        MyAdapter (Context c, String title[], String name[], int img[]) {
-            super(c, R.layout.row, R.id.name, title);
-            this.context = c;
-            this.rTitle = title;
-            this.rName = name;
-            this.rImage = img;
-        }
-
-        @NonNull
-        @Override
-        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-            LayoutInflater layoutInflater = (LayoutInflater)getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View row = layoutInflater.inflate(R.layout.row, parent, false);
-            ImageView images = row.findViewById(R.id.image);
-            TextView songTitle = row.findViewById(R.id.title);
-            TextView singerName = row.findViewById(R.id.name);
-
-            // set resources on View
-            images.setImageResource(rImage[position]);
-            songTitle.setText(getItem(position));
-            singerName.setText(rName[position]);
-
-            return row;
-        }
     }
 }
