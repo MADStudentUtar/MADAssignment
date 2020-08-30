@@ -101,7 +101,6 @@ public class SongList extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Toast.makeText(SongList.this, "Upload", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(SongList.this, SongUpload.class));
             }
         });

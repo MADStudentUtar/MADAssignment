@@ -1,107 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:layout_margin="20dp"
     tools:context=".SongUpload">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/song_upload"
-        android:textColor="#000000"
-        android:textSize="50sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="20dp"/>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Song Title"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="#000000" />
-
-    <EditText
-        android:id="@+id/songName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/colorTheme"
-        android:ems="10"
-        android:inputType="text" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Artist"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="#000000" />
-
-    <EditText
-        android:id="@+id/singerName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/colorTheme"
-        android:autofillHints=""
-        android:ems="10"
-        android:inputType="text" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Upload"
-        android:layout_marginTop="20dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="#000000" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:weightSum="10">
+        android:layout_margin="20dp"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/song_upload"
+            android:textColor="#000000"
+            android:textSize="50sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="20dp"/>
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="6"
-            android:layout_gravity="center"
-            android:text="No file selected"
-            android:id="@+id/songURL"/>
+            android:text="@string/song_title"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="#000000" />
+
+        <EditText
+            android:id="@+id/songName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorTheme"
+            android:ems="10"
+            android:autofillHints=""
+            android:inputType="text"
+            android:importantForAutofill="no" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/artist"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="#000000" />
+
+        <EditText
+            android:id="@+id/singerName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorTheme"
+            android:autofillHints=""
+            android:ems="10"
+            android:inputType="text" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/upload"
+            android:layout_marginTop="20dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="#000000" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="10">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="7"
+                android:layout_gravity="center"
+                android:text="@string/no_file_selected"
+                android:id="@+id/songURL"/>
+
+            <Button
+                android:id="@+id/openAudioFiles"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_weight="3"
+                android:textSize="16sp"
+                android:text="@string/browse"
+                android:background="@drawable/signoutbtn"
+                android:backgroundTint="@color/colorTheme"
+                android:onClick="openAudioFiles"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
+        <ProgressBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/uploadProgress"
+            android:indeterminateTint="@color/colorTheme"
+            android:indeterminate="true"
+            android:layout_marginTop="20dp"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:visibility="invisible"/>
 
         <Button
-            android:id="@+id/openAudioFiles"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_weight="4"
+            android:background="@drawable/signoutbtn"
+            android:backgroundTint="@color/colorThemeDark"
+            android:textColor="@android:color/white"
+            android:text="@string/upload"
             android:textSize="16sp"
-            android:text="Upload Song"
-            android:background="@color/colorTheme"
-            android:onClick="openAudioFiles"
-            android:textColor="@color/white" />
-
+            android:layout_marginTop="20dp"
+            android:id="@+id/uploadFirebase"
+            android:onClick="uploadFirebase"/>
     </LinearLayout>
 
-    <ProgressBar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/uploadProgress"
-        android:indeterminateTint="@color/colorTheme"
-        android:indeterminate="true"
-        android:layout_marginTop="20dp"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:visibility="invisible"/>
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorTheme"
-        android:textColor="@android:color/white"
-        android:text="Upload"
-        android:layout_marginTop="20dp"
-        android:id="@+id/uploadFirebase"
-        android:onClick="uploadFirebase"/>
-
-</LinearLayout>
+</ScrollView>

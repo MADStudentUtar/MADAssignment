@@ -1,8 +1,5 @@
 package utar.edu.mad;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
@@ -12,6 +9,7 @@ import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
+import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
@@ -19,16 +17,27 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
-import java.util.ArrayList;
+import java.io.ByteArrayOutputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.annotation.Nullable;
 
@@ -36,14 +45,18 @@ public class SongUpload extends AppCompatActivity {
 
     TextView songURL;
     ProgressBar progressBar;
-    Uri audioUri;
-    StorageReference storageReference;
+    Uri audioUri, album_art;
+    StorageReference storageReference, storageReferenceImg;
     StorageTask storageTask;
-    DatabaseReference referenceSongs;
+    DocumentReference documentReference;
     MediaMetadataRetriever metadataRetriever;
+    String currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
     EditText editTitle, editArtist;
     byte[] art;
-    String title, artist, album_art="", duration;
+    String title, artist;
+    String defaultImg = "https://firebasestorage.googleapis.com/v0/b/karaokie-7aaa8.appspot.com/o/songsImg%2Fblack.png?alt=media&token=ea37ee3d-1883-4def-aee6-abde42b12f43";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,8 +68,8 @@ public class SongUpload extends AppCompatActivity {
         editArtist = findViewById(R.id.singerName);
 
         metadataRetriever = new MediaMetadataRetriever();
-        referenceSongs = FirebaseDatabase.getInstance().getReference().child("songs");
-        storageReference = FirebaseStorage.getInstance().getReference().child("songs");
+        storageReference = FirebaseStorage.getInstance().getReference("songs");
+        storageReferenceImg = FirebaseStorage.getInstance().getReference("songsImg");
     }
 
     public void openAudioFiles (View v) {
@@ -74,9 +87,6 @@ public class SongUpload extends AppCompatActivity {
             String fileNames = getFileName(audioUri);
             songURL.setText(fileNames);
             metadataRetriever.setDataSource(this,audioUri);
-
-            artist = editArtist.getText().toString();
-            title = editTitle.getText().toString();
             art = metadataRetriever.getEmbeddedPicture();
         }
     }
@@ -118,35 +128,91 @@ public class SongUpload extends AppCompatActivity {
     }
 
     private void uploadFiles () {
-        if(audioUri != null){
-            progressBar.setVisibility(View.VISIBLE);
-            final StorageReference storageReference1 = storageReference.child(System.currentTimeMillis()+"."+getfileextension(audioUri));
-            storageTask = storageReference1.putFile(audioUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+        artist = editArtist.getText().toString();
+        title = editTitle.getText().toString();
+        if(artist.equals("") ||  title.equals("")){
+            Toast.makeText(this, "Please fill in all details.", Toast.LENGTH_SHORT).show();
+        } else {
+            if (audioUri != null) {
+                progressBar.setVisibility(View.VISIBLE);
+                if (art != null) {
+                    final StorageReference ImgName = storageReferenceImg.child(title + "_" + artist + ".jpg");
+                    UploadTask uploadTask = ImgName.putBytes(art);
 
-                    storageReference1.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    Task<Uri> tasks = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                         @Override
-                        public void onSuccess(Uri uri) {
-                            Upload uploadSong = new Upload(title, artist, album_art, duration, audioUri.toString());
-                            String uploadId = referenceSongs.push().getKey();
-                            referenceSongs.child(uploadId).setValue(uploadSong);
-                            Toast.makeText(getApplicationContext(), "Song uploaded.", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(getApplicationContext(), SongList.class));
-                            finish();
+                        public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                            if(!task.isSuccessful()){
+                                throw task.getException();
+                            }
+
+                            return ImgName.getDownloadUrl();
+                        }
+                    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Uri> task) {
+                            if(task.isSuccessful()){
+                                Uri downloadUri = task.getResult();
+                                album_art = downloadUri;
+                            }
                         }
                     });
+                }
 
-                }
-            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
-                    double progress = (100.0 * taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount());
-                    progressBar.setProgress((int)progress);
-                }
-            });
-        } else {
-            Toast.makeText(this, "No file selected to upload", Toast.LENGTH_SHORT).show();
+                final StorageReference storageReference1 = storageReference.child(System.currentTimeMillis() + "." + getfileextension(audioUri));
+                storageTask = storageReference1.putFile(audioUri);
+                Task<Uri> urlTask = storageTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                    @Override
+                    public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                        if (!task.isSuccessful()) {
+                            throw task.getException();
+                        }
+                        return storageReference1.getDownloadUrl();
+                    }
+                }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Uri> task) {
+                        if (task.isSuccessful()) {
+                            Uri downloadUri = task.getResult();
+                            Map<String, String> song_details = new HashMap<>();
+                            song_details.put("song_title", title);
+                            song_details.put("artist", artist);
+                            song_details.put("songURL", downloadUri.toString());
+                            if (album_art != null) {
+                                song_details.put("song_img",album_art.toString());
+                            } else {
+                                song_details.put("song_img",defaultImg);
+                            }
+
+                            documentReference = db.collection("user").document(currentUserID).collection("songs").document(title+"-"+artist);
+
+                            documentReference.set(song_details)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            progressBar.setVisibility(View.INVISIBLE);
+                                            Toast.makeText(getApplicationContext(), "Song uploaded", Toast.LENGTH_SHORT).show();
+                                            startActivity(new Intent(getApplicationContext(), SongList.class));
+                                            finish();
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(getApplicationContext(), "Failed to upload. Please try again.", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+
+            } else {
+                Toast.makeText(this, "Please upload song.", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
