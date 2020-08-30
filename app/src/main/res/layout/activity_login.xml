@@ -1,79 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/loginback"
     android:gravity="center"
     android:orientation="vertical"
-    android:background="@drawable/loginback">
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp">
 
     <ImageView
         android:layout_width="224dp"
         android:layout_height="224dp"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/applogo"
-        android:layout_marginBottom="40dp"/>
+        android:layout_marginBottom="40dp"
+        android:src="@drawable/applogo" />
 
     <EditText
-        android:layout_width="380dp"
+        android:id="@+id/login_email"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@android:color/white"
         android:hint="User Email"
         android:inputType="textEmailAddress"
         android:textColor="@android:color/white"
-        android:textColorHint="@android:color/white"
-        android:id="@+id/login_email"/>
+        android:textColorHint="@android:color/white" />
+
     <EditText
-        android:layout_width="380dp"
+        android:id="@+id/login_password"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:backgroundTint="@android:color/white"
         android:hint="Password"
         android:inputType="textPassword"
-        android:layout_marginTop="10dp"
         android:textColor="@android:color/white"
-        android:textColorHint="@android:color/white"
-        android:id="@+id/login_password"/>
-    
+        android:textColorHint="@android:color/white" />
+
     <CheckBox
-        android:layout_width="200dp"
+        android:id="@+id/login_checkbox"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Show Password"
+        android:layout_gravity="end"
         android:buttonTint="@android:color/white"
-        android:textColor="@android:color/white"
-        android:layout_marginRight="70dp"
-        android:id="@+id/login_checkbox" />
-    
-    <Button
-        android:layout_width="380dp"
-        android:layout_height="40dp"
-        android:background="#0076FF"
-        android:textColor="@android:color/white"
-        android:text="Login"
-        android:layout_marginTop="15dp"
-        android:id="@+id/login_button"/>
+        android:text="Show Password"
+        android:textColor="@android:color/white" />
 
     <Button
+        android:id="@+id/login_button"
         android:layout_width="380dp"
         android:layout_height="40dp"
-        android:background="#4D0076FF"
-        android:textColor="@android:color/white"
-        android:text="Sign Up"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/loginbtn"
+        android:text="Login"
+        android:textColor="@android:color/white" />
+
+    <Button
+        android:id="@+id/login_register_button"
+        android:layout_width="380dp"
+        android:layout_height="40dp"
         android:layout_marginTop="10dp"
-        android:id="@+id/login_register_button"/>
-    
+        android:background="#4D0076FF"
+        android:text="Sign Up"
+        android:textColor="@android:color/white" />
+
     <ProgressBar
+        android:id="@+id/login_progressbar"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/login_progressbar"
-        android:indeterminateTint="@android:color/white"
-        android:indeterminate="true"
         android:layout_marginTop="20dp"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:visibility="invisible"/>
-
-
+        android:indeterminate="true"
+        android:indeterminateTint="@android:color/white"
+        android:visibility="invisible" />
 
 
 </LinearLayout>

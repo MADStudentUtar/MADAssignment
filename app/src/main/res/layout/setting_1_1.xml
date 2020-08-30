@@ -93,7 +93,7 @@
         app:layout_constraintLeft_toLeftOf="parent" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/songTitle"
         android:layout_width="0dp"
         android:layout_height="18dp"
         android:layout_marginStart="30dp"

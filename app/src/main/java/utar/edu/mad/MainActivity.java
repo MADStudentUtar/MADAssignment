@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 mAuth.signOut();
-                Intent intent = new Intent(MainActivity.this,login.class);
+                Intent intent = new Intent(MainActivity.this,LyricsDisplay.class);
                 startActivity(intent);
                 finish();
             }
@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser == null)
         {
-            Intent intent = new Intent(MainActivity.this,login.class);
+            Intent intent = new Intent(MainActivity.this,LyricsDisplay.class);
             startActivity(intent);
             finish();
         }
