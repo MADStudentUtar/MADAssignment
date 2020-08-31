@@ -6,9 +6,21 @@
         android:icon="@drawable/search_icon"
         android:title="search"
         app:showAsAction="ifRoom"/>
+
     <item
         android:id="@+id/add"
         android:icon="@drawable/add_icon"
         android:title="add"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom">
+
+        <menu>
+            <item
+                android:id="@+id/addContacts"
+                android:title="Add Contacts"/>
+            <item
+                android:id="@+id/newChat"
+                android:title="New Chat"/>
+        </menu>
+    </item>>
+
 </menu>

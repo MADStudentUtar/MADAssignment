@@ -22,6 +22,22 @@ public class Chat extends AppCompatActivity {
     }
 
     @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.addContacts:
+                startActivity(new Intent(Chat.this, NewFriend.class));
+                overridePendingTransition(0,0);
+                finish();
+                return true;
+            case R.id.newChat:
+//                startActivity(new Intent(Chat.this, .class));
+//                overridePendingTransition(0,0);
+//                finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);

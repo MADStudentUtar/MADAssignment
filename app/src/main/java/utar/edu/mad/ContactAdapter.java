@@ -56,7 +56,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
             super(itemView);
             name_contact = itemView.findViewById(R.id.nameContactTV);
             phone = itemView.findViewById(R.id.PhoneTV);
-            imageView = itemView.findViewById(R.id.imageView);
+            imageView = itemView.findViewById(R.id.contactImageView);
         }
     }
 }

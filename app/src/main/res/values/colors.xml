@@ -6,6 +6,7 @@
     <color name="colorTheme">#98b4d4</color>
     <color name="colorThemeDark">#1F82F4</color>
     <color name="colorBlack">#000</color>
+    <color name="colorGray">#DCDCDC</color>
     <color name="white">#FFFFFF</color>
     <color name="scrollBackground">#ACE5FF</color>
 </resources>

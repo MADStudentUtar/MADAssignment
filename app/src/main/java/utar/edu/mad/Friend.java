@@ -45,6 +45,24 @@ public class Friend extends AppCompatActivity {
     }
 
     @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.addContacts:
+                startActivity(new Intent(Friend.this, NewFriend.class));
+                overridePendingTransition(0,0);
+                finish();
+                return true;
+            case R.id.newChat:
+//                startActivity(new Intent(Friend.this, .class));
+//                overridePendingTransition(0,0);
+//                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend);
@@ -102,7 +120,7 @@ public class Friend extends AppCompatActivity {
         scrollBar.setBubbleTextProvider(new BubbleTextProvider() {
             @Override
             public String provideBubbleText(int i) {
-                return new StringBuilder(contactList.get(i).getName().substring(0,1)).toString();
+                return new String(contactList.get(i).getName().substring(0,1)).toString();
             }
         });
 
