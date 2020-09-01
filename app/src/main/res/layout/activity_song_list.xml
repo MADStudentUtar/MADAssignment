@@ -20,20 +20,48 @@
             android:textSize="50sp"
             android:textStyle="bold" />
 
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/searchSong"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:queryHint="Search Song Name"
-            app:iconifiedByDefault="false">
+            android:weightSum="10"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
 
-        </androidx.appcompat.widget.SearchView>
-        <ListView
+            <EditText
+                android:id="@+id/searchSong"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="9.8"
+                android:backgroundTint="@color/colorTheme"
+                android:ems="10"
+                android:hint="@string/search_songs"
+                android:inputType="text"
+                android:autofillHints="" />
+
+            <Button
+                android:id="@+id/searchBtn"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="10dp"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:background="@drawable/search_icon"/>
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/firestore_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/lists"
-            android:layout_marginBottom="40dp">
-        </ListView>
+            android:layout_height="match_parent" />
+
+        <!--        <androidx.appcompat.widget.SearchView-->
+<!--            android:id="@+id/searchSong"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:queryHint="Search Song Name"-->
+<!--            app:iconifiedByDefault="false">-->
+
+<!--        </androidx.appcompat.widget.SearchView>-->
+
 
     </LinearLayout>
 
