@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".NewFriend"/>
+        <activity android:name=".Message"></activity>
+        <activity android:name=".NewFriend" />
         <activity android:name=".Chat" />
         <activity android:name=".Friend" />
         <activity android:name=".SongList" />

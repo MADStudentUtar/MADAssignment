@@ -124,8 +124,8 @@ public class SongList extends AppCompatActivity {
                         finish();
                         return true;
                     case R.id.chat:
-//                        startActivity(new Intent(getApplicationContext(), ));
-//                        overridePendingTransition(0,0);
+                        startActivity(new Intent(SongList.this, Message.class));
+                        overridePendingTransition(0,0);
                         return true;
                     case R.id.profile:
                         ShowProfile();
