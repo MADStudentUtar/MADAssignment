@@ -170,6 +170,7 @@ public class SongUpload extends AppCompatActivity {
                             Uri downloadUri = task.getResult();
                             Map<String, String> song_details = new HashMap<>();
                             song_details.put("karaoke", "");
+                            song_details.put("lyrics", "");
                             song_details.put("song_title", title);
                             song_details.put("artist", artist);
                             song_details.put("songURL", downloadUri.toString());
