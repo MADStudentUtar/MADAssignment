@@ -41,17 +41,21 @@ public class Register extends AppCompatActivity {
     DocumentReference documentReference;
     DocumentReference documentReference2;
     DocumentReference documentReference3;
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    String currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-    String a = new String("Mojito_JayChou");
-    String b = new String("JustTheWayYouAre_BrunoMars");
-    String c = new String("HowYouLikeThat_BlackPink");
+    FirebaseFirestore db;
+    String currentUserID;
+    //FirebaseFirestore db = FirebaseFirestore.getInstance();
+    //String currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        db = FirebaseFirestore.getInstance();
+        //mAuth=FirebaseAuth.getInstance();
+        //currentUserID = mAuth.getInstance().getCurrentUser().getUid();
 
         register_email_field = findViewById(R.id.register_email);
         register_pass_field = findViewById(R.id.register_password);
@@ -89,6 +93,7 @@ public class Register extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()){
+                                    currentUserID = mAuth.getInstance().getCurrentUser().getUid();
                                     loadSong();
                                     sendtoMain();
                                 }else{
@@ -132,23 +137,18 @@ public class Register extends AppCompatActivity {
         JustTheWayYouAre_BrunoMars.put("song_img", "https://firebasestorage.googleapis.com/v0/b/karaokie-7aaa8.appspot.com/o/songsImg%2FBruno%20Mars.jpg?alt=media&token=3a0a3ee2-8e57-4725-a842-33c7a8a8bed7");
         JustTheWayYouAre_BrunoMars.put("song_title", "Just The Way You Are");
         JustTheWayYouAre_BrunoMars.put("song_url", "https://firebasestorage.googleapis.com/v0/b/karaokie-7aaa8.appspot.com/o/songs%2FJust%20the%20Way%20You%20Are.mp3?alt=media&token=68b243a4-d91d-4869-a115-57b32d869bfb");
-        documentReference2 = db.collection("user").document(currentUserID).collection("songs").document("JustTheWayYouAre-BrunoMars");
+        documentReference2 = db.collection("user").document(currentUserID).collection("songs").document("Just The Way You Are-Bruno Mars");
         documentReference2.set(JustTheWayYouAre_BrunoMars);
 
         Map<String, String> HowYouLikeThat_BlackPink = new HashMap<>();
-        Mojito_JayChou.put("artist", "Bruno Mars");
-        Mojito_JayChou.put("karaoke", "https://firebasestorage.googleapis.com/v0/b/karaokie-7aaa8.appspot.com/o/songs%2FJust%20the%20Way%20You%20Are%20-%20Karaoke%20ver.mp3?alt=media&token=f480e4ac-93ee-4347-8c2e-4d675df889c5");
-        Mojito_JayChou.put("lyrics", "");
-        Mojito_JayChou.put("song_img", "");
-        Mojito_JayChou.put("song_title", "");
-        Mojito_JayChou.put("song_url", "");
-        documentReference = db.collection("user").document(currentUserID).collection("songs").document("Mojito-JayChou");
-        documentReference.set(Mojito_JayChou);
-
-        documentReference = db.collection("user").document(currentUserID).collection("songs").document("Mojito-JayChou");
-        documentReference.set(Mojito_JayChou);
-        documentReference2 = db.collection("user").document(currentUserID).collection("songs").document("JustTheWayYouAre-BrunoMars");
-        documentReference3 = db.collection("user").document(currentUserID).collection("songs").document("HowYouLikeThat-BlackPing");
+        HowYouLikeThat_BlackPink.put("artist", "BlackPink");
+        HowYouLikeThat_BlackPink.put("karaoke", "https://firebasestorage.googleapis.com/v0/b/karaokie-7aaa8.appspot.com/o/songs%2FHow%20You%20Like%20That%20-Karaoke%20ver.mp3?alt=media&token=cf444450-9199-4a9e-a629-4334e4e52f6d");
+        HowYouLikeThat_BlackPink.put("lyrics", "https://firebasestorage.googleapis.com/v0/b/karaokie-7aaa8.appspot.com/o/lyrics%2FHow%20You%20Like%20That.txt?alt=media&token=c2b18528-627c-46d4-9fe5-1136a60e3cba");
+        HowYouLikeThat_BlackPink.put("song_img", "https://firebasestorage.googleapis.com/v0/b/karaokie-7aaa8.appspot.com/o/songsImg%2FBlackPink.jpg?alt=media&token=65b15be9-697f-4cb5-ab7b-7c011e9c90b3");
+        HowYouLikeThat_BlackPink.put("song_title", "How You Like That");
+        HowYouLikeThat_BlackPink.put("song_url", "https://firebasestorage.googleapis.com/v0/b/karaokie-7aaa8.appspot.com/o/songs%2FHow%20You%20Like%20That.mp3?alt=media&token=ec06adfb-fbe7-434a-bd61-476f5b329cd6");
+        documentReference3 = db.collection("user").document(currentUserID).collection("songs").document("How You Like That-BlackPink");
+        documentReference3.set(HowYouLikeThat_BlackPink);
     }
 
     @Override
