@@ -2,24 +2,57 @@ package utar.edu.mad;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.List;
 
 public class Chat extends AppCompatActivity {
+    LinearLayout chatsWrapper;
+
+    // Firebase variable
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    CollectionReference receiversCollection;
+    String currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
+        chatsWrapper = (LinearLayout) findViewById(R.id.chatsWrapper);
 
+        // Get chats from firebase
+        receiversCollection = db.collection("messages").document(currentUserID).collection("receivers");
+        receiversCollection.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                List<DocumentSnapshot> receivers = task.getResult().getDocuments();
+
+                for(int i = 0; i < receivers.size(); i++) {
+                    String receiverId = receivers.get(i).getId();
+
+                    db.collection("user").document(receiverId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
+                        }
+                    });
+                }
+            }
+        });
 
         //Bottom navigation bar
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
