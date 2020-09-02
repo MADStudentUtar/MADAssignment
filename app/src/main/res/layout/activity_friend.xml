@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Friend">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/friendToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorTheme"
+        android:elevation="6dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:backgroundTint="@color/colorTheme"
+        app:itemIconTint="@drawable/selector"
+        app:itemTextColor="@drawable/selector"
+        app:menu="@menu/menu_friend"/>
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/contacts_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="609dp"
+            android:layout_marginTop="60dp"
+            android:layout_marginBottom="60dp"
+            android:padding="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <com.trendyol.bubblescrollbarlib.BubbleScrollBar
+            android:id="@+id/bubble_scroll"
+            android:layout_width="wrap_content"
+            android:layout_height="611dp"
+            android:layout_gravity="end"
+            android:layout_marginTop="60dp"
+            android:layout_marginBottom="-1dp"
+            android:orientation="vertical"
+            app:bubbleBackground="@drawable/my_scroll"
+            app:bubbleElevation="6dp"
+            app:bubbleHeight="50dp"
+            app:bubbleMargin="4dp"
+            app:bubbleMinWidth="50dp"
+            app:bubblePadding="4dp"
+            app:bubbleTextColor="@android:color/white"
+            app:bubbleTextSize="8sp"
+            app:scrollbarBackground="@color/white"
+            app:thumbBackground="@color/colorTheme">
+        </com.trendyol.bubblescrollbarlib.BubbleScrollBar>
+
+    </FrameLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_nav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="0dp"
+        android:layout_marginRight="0dp"
+        android:background="@color/colorTheme"
+        app:backgroundTint="@color/colorTheme"
+        app:itemIconTint="@drawable/selector"
+        app:itemTextColor="@drawable/selector"
+        app:menu="@menu/menu_navigation" />
+
+</RelativeLayout>
+

@@ -93,14 +93,14 @@ public class login extends AppCompatActivity {
         super.onStart();
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null){
-            Intent intent = new Intent(login.this,MainActivity.class);
+            Intent intent = new Intent(login.this,SongList.class);
             startActivity(intent);
             finish();
         }
     }
 
     private void sendtoMain(){
-        Intent intent = new Intent(login.this,MainActivity.class);
+        Intent intent = new Intent(login.this,SongList.class);
         startActivity(intent);
         finish();
     }
