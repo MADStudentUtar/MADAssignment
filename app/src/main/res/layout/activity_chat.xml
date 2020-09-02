@@ -1,62 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".Chat">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/chatToolbar"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorTheme"
-        android:elevation="6dp"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:backgroundTint="@color/colorTheme"
-        app:itemIconTint="@drawable/selector"
-        app:itemTextColor="@drawable/selector"
-        app:menu="@menu/menu_friend"/>
+        android:layout_height="fill_parent"
+        android:layout_weight="1">
 
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="5dp">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/contacts_recycler"
+        <LinearLayout
+            android:id="@+id/chatsWrapper"
             android:layout_width="match_parent"
-            android:layout_height="725dp"
-            android:layout_marginTop="60dp"
-            android:layout_marginBottom="60dp"
-            android:padding="4dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-        <com.trendyol.bubblescrollbarlib.BubbleScrollBar
-            android:id="@+id/bubble_scroll"
-            android:layout_width="wrap_content"
-            android:layout_height="784dp"
-            android:layout_marginTop="60dp"
-            android:layout_marginBottom="-1dp"
-            android:layout_gravity="end"
-            android:orientation="vertical"
-            app:bubbleBackground="@drawable/my_scroll"
-            app:bubbleElevation="6dp"
-            app:bubbleHeight="50dp"
-            app:bubbleMargin="4dp"
-            app:bubbleMinWidth="50dp"
-            app:bubblePadding="4dp"
-            app:bubbleTextColor="@android:color/white"
-            app:bubbleTextSize="8sp"
-            app:scrollbarBackground="@color/white"
-            app:thumbBackground="@color/white">
-        </com.trendyol.bubblescrollbarlib.BubbleScrollBar>
+        </LinearLayout>
 
-    </FrameLayout>
+    </ScrollView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav"
@@ -73,5 +37,5 @@
         app:itemTextColor="@drawable/selector"
         app:menu="@menu/menu_navigation" />
 
-</RelativeLayout>
+</LinearLayout>
 

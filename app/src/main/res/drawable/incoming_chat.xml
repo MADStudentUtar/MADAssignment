@@ -7,13 +7,13 @@
             android:pivotY="0%"
             android:toDegrees="0" >
                 <shape android:shape="rectangle">
-                    <solid android:color="@color/colorThemeDark" />
+                    <solid android:color="#cbebfc" />
                 </shape>
         </rotate>
     </item>
     <item android:left="15sp">
         <shape android:shape="rectangle" >
-            <solid android:color="@color/colorThemeDark" />
+            <solid android:color="#cbebfc" />
             <corners android:radius="5sp" />
         </shape>
     </item>
