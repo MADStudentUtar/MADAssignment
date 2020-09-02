@@ -1,19 +1,23 @@
 package utar.edu.mad;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.media.AudioAttributes;
 import android.media.MediaPlayer;
+import android.media.MediaRecorder;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.StrictMode;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageButton;
@@ -24,19 +28,24 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class LyricsDisplay extends AppCompatActivity {
 
     MediaPlayer song;
     MediaPlayer karaoke;
+    MediaRecorder recorder;
 
     ImageButton btn;
     ImageButton sourceBtn;
@@ -52,6 +61,7 @@ public class LyricsDisplay extends AppCompatActivity {
     int totalTime;
 
     boolean karaokeFlag = false;
+    boolean recordStart = false;
 
     LinearLayout lyricsDisplay;
     LinearLayout artistDisplay;
@@ -60,9 +70,13 @@ public class LyricsDisplay extends AppCompatActivity {
     ArrayList<String> time;
     ArrayList<String> lyrics;
 
+    String fileName = null;
+    String[] permissions = {android.Manifest.permission.RECORD_AUDIO, android.Manifest.permission.READ_EXTERNAL_STORAGE,
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE};
+
     //Future intent
-    String lyricsURL = "https://firebasestorage.googleapis.com/v0/b/karaokie-7aaa8.appspot.com/o/lyrics%2FJust%20The%20Way%20You%20Are.txt?alt=media&token=becfc794-7a00-47bf-ae78-59b522ab65fe";
-    String artistURL = "https://firebasestorage.googleapis.com/v0/b/karaokie-7aaa8.appspot.com/o/songsImg%2FBruno%20Mars.jpg?alt=media&token=3a0a3ee2-8e57-4725-a842-33c7a8a8bed7";
+    String lyricsURL = "https://firebasestorage.googleapis.com/v0/b/karaokie-7aaa8.appspot.com/o/lyrics%2FHow%20You%20Like%20That.txt?alt=media&token=c2b18528-627c-46d4-9fe5-1136a60e3cba";
+    String songImgURL = "https://firebasestorage.googleapis.com/v0/b/karaokie-7aaa8.appspot.com/o/songsImg%2FJay%20Chou.jpg?alt=media&token=f9747d8e-068a-4444-96c2-0b7bf5dc4ddf";
     String songURL = "https://firebasestorage.googleapis.com/v0/b/karaokie-7aaa8.appspot.com/o/songs%2FJust%20the%20Way%20You%20Are.mp3?alt=media&token=68b243a4-d91d-4869-a115-57b32d869bfb";
     String karaokeURL = "https://firebasestorage.googleapis.com/v0/b/karaokie-7aaa8.appspot.com/o/songs%2FJust%20the%20Way%20You%20Are%20-%20Karaoke%20ver.mp3?alt=media&token=f480e4ac-93ee-4347-8c2e-4d675df889c5";
     String songTitle = "Just The Way You Are";
@@ -77,8 +91,10 @@ public class LyricsDisplay extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
+        ActivityCompat.requestPermissions(this, permissions, 200);
+
         //setup screen bg with artist
-        Bitmap artistBg = getBitmapFromURL(artistURL);
+        Bitmap artistBg = getBitmapFromURL(songImgURL);
         Drawable dr = new BitmapDrawable(artistBg);
         artistDisplay = findViewById(R.id.bg);
         artistDisplay.setBackground(dr);
@@ -141,7 +157,6 @@ public class LyricsDisplay extends AppCompatActivity {
         );
 
         //read lyrics
-        AssetManager am = this.getAssets();
         lyricsDisplay = findViewById(R.id.lyrics);
         String timeRegex = "\\[([0-9]+):([0-9.]+)\\]";
 
@@ -195,6 +210,24 @@ public class LyricsDisplay extends AppCompatActivity {
 
         //play the song
         song.start();
+
+        //set up records filename
+        Date cur = new Date();
+        SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy hh:mm:ss a");
+
+        fileName = getExternalCacheDir().getAbsolutePath();
+        fileName += format.format(cur);
+        fileName += ".3gp";
+
+        //exit player
+        findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                song.release();
+                karaoke.release();
+                finish();
+            }
+        });
     }
 
     @SuppressLint("HandlerLeak")
@@ -261,7 +294,7 @@ public class LyricsDisplay extends AppCompatActivity {
     public void onOffKaraoke(View view) {
         sourceBtn = findViewById(R.id.source);
 
-        if(!song.isPlaying()){
+        if (!song.isPlaying()) {
             Toast.makeText(this, "Please start the music", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -300,6 +333,48 @@ public class LyricsDisplay extends AppCompatActivity {
             e.printStackTrace();
             return null;
         }
+    }
+
+    //record voice
+    private void startRecording() {
+        recordBtn = findViewById(R.id.record);
+
+        recorder = new MediaRecorder();
+        recorder.reset();
+        recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        recorder.setOutputFile(fileName);
+        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+
+        recordBtn.setImageResource(R.drawable.offmic);
+        Toast.makeText(this, "Recording Start", Toast.LENGTH_SHORT).show();
+
+        try {
+            recorder.prepare();
+        } catch (IOException e) {
+            Log.e("Audio Record", "prepare failed");
+            //System.out.println("" + e);
+        }
+
+        recorder.start();
+    }
+
+    private void stopRecording() {
+        Toast.makeText(this, "Recording Stop", Toast.LENGTH_SHORT).show();
+        recordBtn.setImageResource(R.drawable.onmic);
+        recorder.stop();
+        recorder.release();
+        recorder = null;
+    }
+
+    public void onRecord(View view) {
+
+        if (recordStart)
+            stopRecording();
+        else
+            startRecording();
+
+        recordStart = !recordStart;
     }
 
 }

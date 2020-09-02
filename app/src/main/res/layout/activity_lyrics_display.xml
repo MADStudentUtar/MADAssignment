@@ -16,7 +16,7 @@
         android:background="#B3000000">
 
         <ImageButton
-            android:id="@+id/imageButton2"
+            android:id="@+id/back"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentStart="true"
@@ -25,7 +25,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginLeft="20dp"
             android:background="@android:color/transparent"
-            app:srcCompat="@drawable/back_icon" />
+            android:src="@drawable/back_icon" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -138,7 +138,8 @@
             android:background="@drawable/send_bg"
             android:foregroundGravity="center"
             app:srcCompat="@drawable/onmic"
-            tools:ignore="VectorDrawableCompat" />
+            tools:ignore="VectorDrawableCompat"
+            android:onClick="onRecord"/>
 
         <ImageButton
             android:id="@+id/controller"
