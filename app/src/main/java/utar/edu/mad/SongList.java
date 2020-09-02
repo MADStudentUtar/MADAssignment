@@ -2,10 +2,13 @@ package utar.edu.mad;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -22,16 +26,20 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class SongList extends AppCompatActivity implements FirestoreAdapter.OnListItemClick {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     DocumentReference documentReference;
     Button searchBtn;
+    EditText searchSong;
 
     private RecyclerView firestoreList;
     private FirestoreAdapter adapter;
 
     String currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    //Query songs from firebase
+    Query querySong = db.collection("user").document(currentUserID).collection("songs");
 
 
     @Override
@@ -43,9 +51,6 @@ public class SongList extends AppCompatActivity implements FirestoreAdapter.OnLi
 
         documentReference = db.collection("user").document(currentUserID).collection("profile").document("profile_details");
 
-        //Query songs from firebase
-        Query querySong = db.collection("user").document(currentUserID).collection("songs");
-
         //RecyclerOptions
         FirestoreRecyclerOptions<SongModel> options = new FirestoreRecyclerOptions.Builder<SongModel>()
                 .setQuery(querySong, SongModel.class)
@@ -55,8 +60,30 @@ public class SongList extends AppCompatActivity implements FirestoreAdapter.OnLi
         firestoreList.setLayoutManager(new LinearLayoutManager(this));
         firestoreList.setAdapter(adapter);
 
-        //search button
+        //search
+        searchSong = findViewById(R.id.searchSong);
         searchBtn = findViewById(R.id.searchBtn);
+        searchSong.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (!editable.toString().isEmpty()){
+                    search(editable.toString());
+                } else {
+                    search ("");
+                }
+
+            }
+        });
 
         //floating upload button
         FloatingActionButton fab = findViewById(R.id.btn);
@@ -97,6 +124,23 @@ public class SongList extends AppCompatActivity implements FirestoreAdapter.OnLi
             }
         });
     }
+
+    private void search(String s) {
+        Query query = querySong.whereArrayContains("keyword", s);
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+            }
+        })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+    }
+
     public void ShowProfile(){
         documentReference.get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {

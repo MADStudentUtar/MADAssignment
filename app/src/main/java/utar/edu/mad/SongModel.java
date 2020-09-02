@@ -1,17 +1,24 @@
 package utar.edu.mad;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SongModel {
 
-    private String artist, songURL, song_img, song_title, karaoke;
+    private String artist, songURL, song_img, song_title, karaoke, lyrics;
+    private List<String> keyword;
 
-    private SongModel(){}
+    private SongModel() {
+    }
 
-    private SongModel(String artist, String song_img, String karaoke, String song_title, String songURL){
+    private SongModel(String artist, String song_img, String karaoke, String lyrics, String song_title, String songURL, List<String> keyword) {
         this.artist = artist;
         this.song_img = song_img;
         this.karaoke = karaoke;
+        this.lyrics = lyrics;
         this.song_title = song_title;
         this.songURL = songURL;
+        this.keyword = keyword;
     }
 
     public String getArtist() {
@@ -54,55 +61,19 @@ public class SongModel {
         this.karaoke = karaoke;
     }
 
-//    private String Artist, Image, Karaoke, Title, Url;
-//
-//    private SongModel(){}
-//
-//    private SongModel(String artist, String image, String karaoke, String title, String url){
-//        this.Artist = artist;
-//        this.Image = image;
-//        this.Karaoke = karaoke;
-//        this.Title = title;
-//        this.Url = url;
-//    }
-//
-//    public String getArtist() {
-//        return Artist;
-//    }
-//
-//    public void setArtist(String artist) {
-//        Artist = artist;
-//    }
-//
-//    public String getImage() {
-//        return Image;
-//    }
-//
-//    public void setImage(String image) {
-//        Image = image;
-//    }
-//
-//    public String getKaraoke() {
-//        return Karaoke;
-//    }
-//
-//    public void setKaraoke(String karaoke) {
-//        Karaoke = karaoke;
-//    }
-//
-//    public String getTitle() {
-//        return Title;
-//    }
-//
-//    public void setTitle(String title) {
-//        Title = title;
-//    }
-//
-//    public String getUrl() {
-//        return Url;
-//    }
-//
-//    public void setUrl(String url) {
-//        Url = url;
-//    }
+    public String getLyrics() {
+        return lyrics;
+    }
+
+    public void setLyrics(String lyrics) {
+        this.lyrics = lyrics;
+    }
+
+    public List<String> getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(List<String> keyword) {
+        this.keyword = keyword;
+    }
 }

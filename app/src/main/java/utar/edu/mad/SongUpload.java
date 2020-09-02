@@ -7,6 +7,7 @@ import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
+import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
@@ -30,7 +31,10 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nullable;
@@ -124,6 +128,8 @@ public class SongUpload extends AppCompatActivity {
     private void uploadFiles () {
         artist = editArtist.getText().toString();
         title = editTitle.getText().toString();
+        generateSearchKeywords generateKeywords = new generateSearchKeywords();
+        final List<String> keyword = generateKeywords.searchKeywords(title);
         if(artist.equals("") ||  title.equals("")){
             Toast.makeText(this, "Please fill in all details.", Toast.LENGTH_SHORT).show();
         } else {
@@ -155,7 +161,7 @@ public class SongUpload extends AppCompatActivity {
 
                 final StorageReference storageReference1 = storageReference.child(System.currentTimeMillis() + "." + getfileextension(audioUri));
                 storageTask = storageReference1.putFile(audioUri);
-                Task<Uri> urlTask = storageTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                Task urlTask = storageTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                     @Override
                     public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
                         if (!task.isSuccessful()) {
@@ -168,8 +174,10 @@ public class SongUpload extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Uri> task) {
                         if (task.isSuccessful()) {
                             Uri downloadUri = task.getResult();
-                            Map<String, String> song_details = new HashMap<>();
+                            Map<String, Object> song_details = new HashMap<>();
+                            song_details.put("keyword", keyword);
                             song_details.put("karaoke", "");
+                            song_details.put("lyrics", "");
                             song_details.put("song_title", title);
                             song_details.put("artist", artist);
                             song_details.put("songURL", downloadUri.toString());
@@ -178,6 +186,7 @@ public class SongUpload extends AppCompatActivity {
                             } else {
                                 song_details.put("song_img",defaultImg);
                             }
+
 
                             documentReference = db.collection("user").document(currentUserID).collection("songs").document(title+"-"+artist);
 
