@@ -7,17 +7,23 @@
     android:orientation="vertical"
     tools:context=".Chat">
 
+    <android.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorTheme"
+        android:elevation="6sp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:title="Chats"/>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         android:layout_weight="1">
-
         <LinearLayout
             android:id="@+id/chatsWrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
         </LinearLayout>
 
     </ScrollView>
