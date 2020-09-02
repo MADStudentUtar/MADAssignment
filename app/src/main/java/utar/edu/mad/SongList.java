@@ -41,7 +41,7 @@ public class SongList extends AppCompatActivity implements FirestoreAdapter.OnLi
 
         firestoreList = findViewById(R.id.firestore_list);
 
-        documentReference = db.collection("user").document(currentUserID).collection("profile").document("profile_details");
+        documentReference = db.collection("user").document(currentUserID);
 
         //Query songs from firebase
         Query querySong = db.collection("user").document(currentUserID).collection("songs");
@@ -105,7 +105,7 @@ public class SongList extends AppCompatActivity implements FirestoreAdapter.OnLi
                         if(task.getResult().exists()){
                             Intent intent = new Intent(SongList.this,ShowProfile.class);
                             startActivity(intent);
-                        }else {
+                        }else{
                             Intent intent = new Intent(SongList.this,CreateProfile.class);
                             startActivity(intent);
                         }

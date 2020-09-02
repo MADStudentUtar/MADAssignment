@@ -64,7 +64,7 @@ public class UpdateUser extends AppCompatActivity {
         progressBar = findViewById(R.id.progressbar_uu);
         imageView = findViewById(R.id.iv_uu);
 
-        documentReference = db.collection("user").document(currentUserID).collection("profile").document("profile_details");
+        documentReference = db.collection("user").document(currentUserID);
         storageReference = firebaseStorage.getInstance().getReference("profile images");
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -124,7 +124,7 @@ public class UpdateUser extends AppCompatActivity {
                         public void onComplete(@NonNull Task<Uri> task) {
                             if(task.isSuccessful()){
                                 final Uri downloadUri = task.getResult();
-                                final DocumentReference sfDocRef = db.collection("user").document(currentUserID).collection("profile").document("profile_details");
+                                final DocumentReference sfDocRef = db.collection("user").document(currentUserID);
 
                                 db.runTransaction(new Transaction.Function<Void>() {
                                     @Override
@@ -168,7 +168,7 @@ public class UpdateUser extends AppCompatActivity {
                         }
                     });
         }else {
-            final DocumentReference sfDocRef = db.collection("user").document(currentUserID).collection("profile").document("profile_details");
+            final DocumentReference sfDocRef = db.collection("user").document(currentUserID);
 
             db.runTransaction(new Transaction.Function<Void>() {
                 @Override

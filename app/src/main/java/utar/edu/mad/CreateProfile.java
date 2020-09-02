@@ -64,7 +64,7 @@ public class CreateProfile extends AppCompatActivity {
         progressBar = findViewById(R.id.progressbar_cp);
         imageView = findViewById(R.id.iv_cp);
 
-        documentReference = db.collection("user").document(currentUserID).collection("profile").document("profile_details");
+        documentReference = db.collection("user").document(currentUserID);
         storageReference = firebaseStorage.getInstance().getReference("profile images");
 
         button.setOnClickListener(new View.OnClickListener() {
