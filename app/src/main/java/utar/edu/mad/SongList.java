@@ -88,9 +88,11 @@ public class SongList extends AppCompatActivity implements FirestoreAdapter.OnLi
                     case R.id.chat:
                         startActivity(new Intent(SongList.this, Chat.class));
                         overridePendingTransition(0,0);
+                        finish();
                         return true;
                     case R.id.profile:
                         ShowProfile();
+                        //finish();
                         return true;
                 }
                 return false;

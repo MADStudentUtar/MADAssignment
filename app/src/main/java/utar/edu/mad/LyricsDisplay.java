@@ -1,9 +1,6 @@
 package utar.edu.mad;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.pm.PackageManager;
-import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -13,7 +10,6 @@ import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.StrictMode;
@@ -43,9 +39,9 @@ import java.util.Date;
 
 public class LyricsDisplay extends AppCompatActivity {
 
-    MediaPlayer song;
-    MediaPlayer karaoke;
-    MediaRecorder recorder;
+    MediaPlayer song = null;
+    MediaPlayer karaoke = null;
+    MediaRecorder recorder = null;
 
     ImageButton btn;
     ImageButton sourceBtn;
@@ -81,6 +77,7 @@ public class LyricsDisplay extends AppCompatActivity {
     String karaokeURL = "https://firebasestorage.googleapis.com/v0/b/karaokie-7aaa8.appspot.com/o/songs%2FJust%20the%20Way%20You%20Are%20-%20Karaoke%20ver.mp3?alt=media&token=f480e4ac-93ee-4347-8c2e-4d675df889c5";
     String songTitle = "Just The Way You Are";
     String artist = "Bruno Mars";
+    boolean records = false;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -92,6 +89,12 @@ public class LyricsDisplay extends AppCompatActivity {
         StrictMode.setThreadPolicy(policy);
 
         ActivityCompat.requestPermissions(this, permissions, 200);
+
+        //getting parameter
+        //songURL = this.getIntent().getStringExtra("song_url");
+        //songTitle = this.getIntent().getStringExtra("song_title");
+        //artist = this.getIntent().getStringExtra("artist");
+        //records = this.getIntent().getBooleanExtra("records", false);
 
         //setup screen bg with artist
         Bitmap artistBg = getBitmapFromURL(songImgURL);
@@ -115,7 +118,11 @@ public class LyricsDisplay extends AppCompatActivity {
         karaoke = new MediaPlayer();
 
         try {
-            song.setDataSource(songURL);
+            if(records)
+                song.setDataSource("file://" + songURL);
+            else
+                song.setDataSource(songURL);
+
             song.prepare();
             karaoke.setDataSource(karaokeURL);
             karaoke.prepare();
@@ -213,17 +220,18 @@ public class LyricsDisplay extends AppCompatActivity {
 
         //set up records filename
         Date cur = new Date();
-        SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy hh:mm:ss a");
+        SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
 
-        fileName = getExternalCacheDir().getAbsolutePath();
+        fileName = getExternalCacheDir().getAbsolutePath() + File.separator;
         fileName += format.format(cur);
-        fileName += ".3gp";
+        fileName += ".mp4";
 
         //exit player
         findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 song.release();
+                song = null;
                 karaoke.release();
                 finish();
             }
@@ -342,7 +350,7 @@ public class LyricsDisplay extends AppCompatActivity {
         recorder = new MediaRecorder();
         recorder.reset();
         recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         recorder.setOutputFile(fileName);
         recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
 
@@ -353,7 +361,6 @@ public class LyricsDisplay extends AppCompatActivity {
             recorder.prepare();
         } catch (IOException e) {
             Log.e("Audio Record", "prepare failed");
-            //System.out.println("" + e);
         }
 
         recorder.start();

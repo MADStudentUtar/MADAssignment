@@ -52,7 +52,7 @@
         android:layout_width="380dp"
         android:layout_height="40dp"
         android:layout_marginTop="15dp"
-        android:background="@drawable/loginbtn"
+        android:background="@drawable/button"
         android:text="Login"
         android:textColor="@android:color/white" />
 
