@@ -155,7 +155,7 @@ public class SongUpload extends AppCompatActivity {
 
                 final StorageReference storageReference1 = storageReference.child(System.currentTimeMillis() + "." + getfileextension(audioUri));
                 storageTask = storageReference1.putFile(audioUri);
-                Task<Uri> urlTask = storageTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                Task urlTask = storageTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                     @Override
                     public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
                         if (!task.isSuccessful()) {
@@ -170,16 +170,17 @@ public class SongUpload extends AppCompatActivity {
                             Uri downloadUri = task.getResult();
                             Map<String, String> song_details = new HashMap<>();
                             song_details.put("karaoke", "");
+                            song_details.put("lyrics", "");
                             song_details.put("song_title", title);
                             song_details.put("artist", artist);
-                            song_details.put("songURL", downloadUri.toString());
+                            song_details.put("song_url", downloadUri.toString());
                             if (album_art != null) {
                                 song_details.put("song_img",album_art.toString());
                             } else {
                                 song_details.put("song_img",defaultImg);
                             }
 
-                            documentReference = db.collection("user").document(currentUserID).collection("songs").document(title+"-"+artist);
+                            documentReference = db.collection("songs").document(currentUserID).collection("songs_details").document(title+"-"+artist);
 
                             documentReference.set(song_details)
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {

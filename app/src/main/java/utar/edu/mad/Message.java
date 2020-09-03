@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -47,10 +49,22 @@ public class Message extends AppCompatActivity {
     ImageView sendButton;
     Query q;
 
+    SharedPreferences profileSP;
+    String defaultUrl = "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png";
+    String currentUsername;
+    String currentUrl;
+
+    // Intent variable
+    String friendId;
+    String friendName;
+    String friendAvatarUrl;
+
     // Firebase Variable
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference senderCollection;
     CollectionReference receiverCollection;
+    DocumentReference senderDocument;
+    DocumentReference receiverDocument;
     String currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
     @Override
@@ -58,8 +72,14 @@ public class Message extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
 
+        profileSP = getSharedPreferences("profile", MODE_PRIVATE);
+        currentUsername = profileSP.getString("name", "Username");
+        currentUrl = profileSP.getString("url", defaultUrl);
+
         // Get required intent
-        String friendName = this.getIntent().getStringExtra("friendName");
+        friendId = this.getIntent().getStringExtra("Id");
+        friendName = this.getIntent().getStringExtra("Name");
+        friendAvatarUrl = this.getIntent().getStringExtra("Url");
 
         // Set friend's name on title
         TextView friendNameView = (TextView) findViewById(R.id.friendNameView);
@@ -70,15 +90,10 @@ public class Message extends AppCompatActivity {
         messagesScrollView = (ScrollView) findViewById(R.id.messagesScrollView);
         messagesWrapper = (LinearLayout) findViewById(R.id.messagesWrapper);
 
-        // Get message collection from firebase
-        String receiverId = "voUNM2RyTDMgnxFrCBC7EhOGzl33";
-
-        if(currentUserID.equals("voUNM2RyTDMgnxFrCBC7EhOGzl33")) {
-            receiverId = "goG6m0PoF4fWPTCU9x9gXbsQUeo2";
-        }
-
-        receiverCollection = db.collection("messages").document(receiverId).collection("receivers").document(currentUserID).collection("messageHistory");
-        senderCollection = db.collection("messages").document(currentUserID).collection("receivers").document(receiverId).collection("messageHistory");
+        receiverCollection = db.collection("messages").document(friendId).collection("receivers").document(currentUserID).collection("messageHistory");
+        senderCollection = db.collection("messages").document(currentUserID).collection("receivers").document(friendId).collection("messageHistory");
+        receiverDocument = db.collection("messages").document(friendId).collection("receivers").document(currentUserID);
+        senderDocument = db.collection("messages").document(currentUserID).collection("receivers").document(friendId);
         q = senderCollection.orderBy("timestamp", Query.Direction.DESCENDING);
         q.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -87,6 +102,23 @@ public class Message extends AppCompatActivity {
                 List<DocumentSnapshot> messages = task.getResult().getDocuments();
 
                 displayMessageHistory(messages);
+            }
+        });
+
+        // add firestore update listener
+        q.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    System.err.println("Listen failed: " + error);
+                    return;
+                }
+
+                if (value != null) {
+                    displayMessageHistory(value.getDocuments());
+                } else {
+                    System.out.print("Current data: null");
+                }
             }
         });
         // ----- Handle Display Message History End ----- //
@@ -100,7 +132,6 @@ public class Message extends AppCompatActivity {
                 finish();
             }
         });
-
 
 
         // Send Message Button Handler
@@ -122,11 +153,21 @@ public class Message extends AppCompatActivity {
                 messageDocData.put("message", messageString);
                 messageDocData.put("sender", true);
                 messageDocData.put("timestamp", new Date());
-
                 senderCollection.add(messageDocData);
 
                 messageDocData.put("sender", false);
                 receiverCollection.add(messageDocData);
+
+                Map<String, Object> updateLastMessage = new HashMap<>();
+                updateLastMessage.put("lastMessage", messageString);
+                updateLastMessage.put("timestamp", new Date());
+                updateLastMessage.put("name", friendName);
+                updateLastMessage.put("url", friendAvatarUrl);
+                senderDocument.set(updateLastMessage, SetOptions.merge());
+
+                updateLastMessage.put("name", currentUsername);
+                updateLastMessage.put("url", currentUrl);
+                receiverDocument.set(updateLastMessage, SetOptions.merge());
             }
         });
 
@@ -142,27 +183,10 @@ public class Message extends AppCompatActivity {
                 }
             }
         });
-
-        q.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                if (error != null) {
-                    System.err.println("Listen failed: " + error);
-                    return;
-                }
-
-                if (value != null) {
-                    displayMessageHistory(value.getDocuments());
-                } else {
-                    System.out.print("Current data: null");
-                }
-            }
-        });
     }
 
     private int convertToSP(int px) {
         float scale = getResources().getDisplayMetrics().scaledDensity;
-
         return (int) (px * scale);
     }
 
@@ -212,7 +236,7 @@ public class Message extends AppCompatActivity {
             // Setup and display the layout if currentUser is sender
             if (sender) {
                 // Load the avatar url into ImageView
-                Picasso.get().load("https://i.kym-cdn.com/photos/images/original/001/168/825/826.jpg").into(avatar);
+                Picasso.get().load(currentUrl).into(avatar);
 
                 // Set the attributes for message TextView
                 messageTV.setTextColor(Color.BLACK);
@@ -235,7 +259,7 @@ public class Message extends AppCompatActivity {
             } else {   // Setup and display the layout if currentUser is receiver
 
                 // Load the avatar url into ImageView
-                Picasso.get().load("https://steamuserimages-a.akamaihd.net/ugc/914672708285096327/4AA87248949B48A096ECF6F79457F4FAA4D57AE9/").into(avatar);
+                Picasso.get().load(friendAvatarUrl).into(avatar);
 
                 // Set the attributes for message TextView
                 messageTV.setTextColor(Color.BLACK);

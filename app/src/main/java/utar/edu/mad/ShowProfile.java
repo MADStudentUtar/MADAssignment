@@ -1,6 +1,7 @@
 package utar.edu.mad;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -33,19 +35,25 @@ public class ShowProfile extends AppCompatActivity {
     DocumentReference documentReference;
     ImageView imageView;
     TextView nameEt, bioEt, birthdateEt, favouritesongEt;
-    Button edit;
+    FloatingActionButton floatingActionButton;
     private FirebaseAuth mAuth;
 
     String currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    SharedPreferences profileSP;
+    SharedPreferences.Editor profileEditor;
+    String defaultUrl = "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_profile);
 
-        edit = findViewById(R.id.editAcc);
+        profileSP = getSharedPreferences("profile", MODE_PRIVATE);
+        profileEditor = profileSP.edit();
+
+        floatingActionButton = findViewById(R.id.floatingbtn_sp);
         imageView = findViewById(R.id.imageView_sp);
-        documentReference = db.collection("user").document(currentUserID).collection("profile").document("profile_details");
+        documentReference = db.collection("user").document(currentUserID);
         storageReference = firebaseStorage.getInstance().getReference("profile images");
 
         nameEt = findViewById(R.id.name_tv_sp);
@@ -53,12 +61,11 @@ public class ShowProfile extends AppCompatActivity {
         birthdateEt = findViewById(R.id.birthdate_tv_sp);
         favouritesongEt = findViewById(R.id.favouritesong_tv_sp);
 
-        edit.setOnClickListener(new View.OnClickListener() {
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ShowProfile.this,UpdateUser.class);
                 startActivity(intent);
-
             }
         });
 
@@ -68,6 +75,8 @@ public class ShowProfile extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 mAuth.signOut();
+                profileEditor.clear();
+                profileEditor.commit();
                 Intent intent = new Intent(ShowProfile.this,login.class);
                 startActivity(intent);
                 finish();
@@ -96,9 +105,10 @@ public class ShowProfile extends AppCompatActivity {
                         finish();
                         return true;
                     case R.id.chat:
-//                        startActivity(new Intent(getApplicationContext(), ));
-//                        overridePendingTransition(0,0);
-//                        return true;
+                        startActivity(new Intent(ShowProfile.this, Chat.class));
+                        overridePendingTransition(0,0);
+                        finish();
+                        return true;
                     case R.id.profile:
                         return true;
                 }
@@ -106,7 +116,7 @@ public class ShowProfile extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.recordedSong).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.recordedButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(ShowProfile.this, RecordeAudio.class));
@@ -117,34 +127,36 @@ public class ShowProfile extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+        String name_result = profileSP.getString("name", "Username");
+        String bio_result = profileSP.getString("bio", "Let's Sing!");
+        String birthdate_result = profileSP.getString("birthdate", " - ");
+        String favouritesong_result = profileSP.getString("favouritesong", " - ");
+        String url_result = profileSP.getString("url", defaultUrl);
+
+        nameEt.setText(name_result);
+        bioEt.setText(bio_result);
+        birthdateEt.setText(birthdate_result);
+        favouritesongEt.setText(favouritesong_result);
+        Picasso.get().load(url_result).into(imageView);
+
         documentReference.get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if(task.getResult().exists()){
-                            String name_result = task.getResult().getString("name");
-                            String bio_result = task.getResult().getString("bio");
-                            String birthdate_result = task.getResult().getString("birthdate");
-                            String favouritesong_result = task.getResult().getString("favouritesong");
-                            String Url = task.getResult().getString("url");
+        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(!task.getResult().exists()){
+                    Toast.makeText(ShowProfile.this, "No Profile Exist", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(ShowProfile.this,CreateProfile.class);
+                    startActivity(intent);
+                }
+            }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
 
-                            Picasso.get().load(Url).into(imageView);
-                            nameEt.setText(name_result);
-                            bioEt.setText(bio_result);
-                            birthdateEt.setText(birthdate_result);
-                            favouritesongEt.setText(favouritesong_result);
-
-                        }else{
-                            Toast.makeText(ShowProfile.this, "No Profile Exist", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-
-                    }
-                });
+            }
+        });
 
     }
 }

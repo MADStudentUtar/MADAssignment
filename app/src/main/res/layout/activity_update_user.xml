@@ -7,7 +7,8 @@
     android:orientation="vertical"
     android:gravity="center"
     android:background="@drawable/loginback"
-    tools:context=".UpdateUser">
+    tools:context=".UpdateUser"
+    android:padding="20sp">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -40,17 +41,17 @@
             android:layout_height="match_parent"
             android:clickable="true"
             android:onClick="ChooseImage"
-            android:scaleType="fitCenter" />
+            android:scaleType="centerCrop" />
     </androidx.cardview.widget.CardView>
 
     <EditText
-        android:layout_width="380dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@android:color/white"
         android:hint="Username"
         android:inputType="text"
         android:textColor="@android:color/white"
-        android:textColorHint="@android:color/white"
+        android:textColorHint="@color/placeholder"
         android:layout_margin="4dp"
         android:id="@+id/et_name_uu"
         android:drawableLeft="@drawable/ic_baseline_person_24"
@@ -59,13 +60,13 @@
         android:drawablePadding="5dp"/>
 
     <EditText
-        android:layout_width="380dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@android:color/white"
         android:hint="Bio"
         android:inputType="text"
         android:textColor="@android:color/white"
-        android:textColorHint="@android:color/white"
+        android:textColorHint="@color/placeholder"
         android:layout_margin="4dp"
         android:id="@+id/et_bio_uu"
         android:drawableLeft="@drawable/ic_bio_24"
@@ -73,13 +74,13 @@
         android:paddingLeft="5dp"
         android:drawablePadding="5dp"/>
     <EditText
-        android:layout_width="380dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@android:color/white"
         android:hint="Birth Date"
         android:inputType="text"
         android:textColor="@android:color/white"
-        android:textColorHint="@android:color/white"
+        android:textColorHint="@color/placeholder"
         android:layout_margin="4dp"
         android:id="@+id/et_birthdate_uu"
         android:drawableLeft="@drawable/ic_birthdaycake_24"
@@ -87,13 +88,13 @@
         android:paddingLeft="5dp"
         android:drawablePadding="5dp"/>
     <EditText
-        android:layout_width="380dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@android:color/white"
         android:hint="Favourite Song"
         android:inputType="text"
         android:textColor="@android:color/white"
-        android:textColorHint="@android:color/white"
+        android:textColorHint="@color/placeholder"
         android:layout_margin="4dp"
         android:id="@+id/et_favouritesong_uu"
         android:drawableLeft="@drawable/ic_baseline_music_note_24"
@@ -103,7 +104,7 @@
 
     <Button
         android:id="@+id/btn_uu"
-        android:layout_width="380dp"
+        android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="20dp"
         android:background="#0076FF"

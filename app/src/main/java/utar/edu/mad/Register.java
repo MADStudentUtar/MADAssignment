@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
@@ -21,6 +22,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Register extends AppCompatActivity {
     private EditText register_email_field;
@@ -32,10 +38,19 @@ public class Register extends AppCompatActivity {
     private ProgressBar progressBar;
     private CheckBox checkBox;
 
+
+    //FirebaseFirestore db = FirebaseFirestore.getInstance();
+    //String currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        //mAuth=FirebaseAuth.getInstance();
+        //currentUserID = mAuth.getInstance().getCurrentUser().getUid();
 
         register_email_field = findViewById(R.id.register_email);
         register_pass_field = findViewById(R.id.register_password);
@@ -73,6 +88,8 @@ public class Register extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()){
+                                    SongDefault songDefault = new SongDefault();
+                                    songDefault.loadSong();
                                     sendtoMain();
                                 }else{
                                     String error = task.getException().getMessage();
@@ -87,14 +104,17 @@ public class Register extends AppCompatActivity {
                 }
             }
         });
+
         reg_login_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Register.this,login.class);
                 startActivity(intent);
+                finish();
             }
         });
     }
+
 
     @Override
     protected void onStart() {
@@ -107,7 +127,7 @@ public class Register extends AppCompatActivity {
 
     }
     private void sendtoMain(){
-        Intent intent = new Intent(Register.this,SongList.class);
+        Intent intent = new Intent(Register.this, ShowProfile.class);
         startActivity(intent);
         finish();
     }

@@ -7,20 +7,35 @@
     android:orientation="vertical"
     tools:context=".Chat">
 
-    <ScrollView
+    <android.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorTheme"
+        android:elevation="6sp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:title="Chats"/>
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         android:layout_weight="1">
 
-        <LinearLayout
-            android:id="@+id/chatsWrapper"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/chatsWrapperView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="10sp"
+            android:paddingRight="10sp"/>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_gravity="center_vertical"/>
 
-        </LinearLayout>
 
-    </ScrollView>
+    </FrameLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav"

@@ -15,11 +15,16 @@
         android:roundIcon="@drawable/black"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".RecordeAudio"></activity>
+        <activity android:name=".Message"></activity>
+        <activity android:name=".SongUpload"></activity>
+        <activity
+            android:name=".SearchFriend"
+            android:parentActivityName=".Friend"/>
+        <activity
+            android:name=".Profile"
+            android:parentActivityName=".Friend" />
+        <activity android:name=".RecordeAudio"/>
         <activity android:name=".LyricsDisplay" />
-        <activity android:name=".Message" />
-        <activity android:name=".NewFriend" />
-        <activity android:name=".SongUpload" />
         <activity android:name=".Chat" />
         <activity android:name=".Friend" />
         <activity android:name=".SongList" />
