@@ -72,6 +72,18 @@ public class UpdateUser extends AppCompatActivity {
         progressBar = findViewById(R.id.progressbar_uu);
         imageView = findViewById(R.id.iv_uu);
 
+        String name_result = profileSP.getString("name", "Username");
+        String bio_result = profileSP.getString("bio", "Let's Sing!");
+        String birthdate_result = profileSP.getString("birthdate", "");
+        String favouritesong_result = profileSP.getString("favouritesong", "");
+        String url_result = profileSP.getString("url", defaultUrl);
+
+        et_name.setText(name_result);
+        et_bio.setText(bio_result);
+        et_birthdate.setText(birthdate_result);
+        et_favouritesong.setText(favouritesong_result);
+        Picasso.get().load(url_result).into(imageView);
+
         documentReference = db.collection("user").document(currentUserID);
         storageReference = firebaseStorage.getInstance().getReference("profile images");
 
@@ -93,9 +105,9 @@ public class UpdateUser extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         if(requestCode == PICK_IMAGE && resultCode == RESULT_OK && data != null && data.getData() != null){
             imageUri = data.getData();
-
             Picasso.get().load(imageUri).into(imageView);
         }
     }
@@ -195,7 +207,6 @@ public class UpdateUser extends AppCompatActivity {
                                 public Void apply(Transaction transaction) throws FirebaseFirestoreException {
                                     DocumentSnapshot snapshot = transaction.get(sfDocRef);
 
-
                                     //transaction.update(sfDocRef, "population", newPopulation);
                                     transaction.update(sfDocRef,"name",name);
                                     transaction.update(sfDocRef,"searchName", name.toLowerCase());
@@ -258,23 +269,5 @@ public class UpdateUser extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Username field is required!", Toast.LENGTH_SHORT).show();
         }
-    }
-
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        String name_result = profileSP.getString("name", "Username");
-        String bio_result = profileSP.getString("bio", "Let's Sing!");
-        String birthdate_result = profileSP.getString("birthdate", "");
-        String favouritesong_result = profileSP.getString("favouritesong", "");
-        String url_result = profileSP.getString("url_result", defaultUrl);
-
-        et_name.setText(name_result);
-        et_bio.setText(bio_result);
-        et_birthdate.setText(birthdate_result);
-        et_favouritesong.setText(favouritesong_result);
-        Picasso.get().load(url_result).into(imageView);
     }
 }

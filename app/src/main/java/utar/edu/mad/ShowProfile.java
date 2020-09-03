@@ -125,7 +125,7 @@ public class ShowProfile extends AppCompatActivity {
         String bio_result = profileSP.getString("bio", "Let's Sing!");
         String birthdate_result = profileSP.getString("birthdate", " - ");
         String favouritesong_result = profileSP.getString("favouritesong", " - ");
-        String url_result = profileSP.getString("url_result", defaultUrl);
+        String url_result = profileSP.getString("url", defaultUrl);
 
         nameEt.setText(name_result);
         bioEt.setText(bio_result);
