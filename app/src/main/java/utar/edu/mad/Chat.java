@@ -13,7 +13,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -21,6 +24,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
@@ -28,13 +32,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Chat extends AppCompatActivity {
-    LinearLayout chatsWrapper;
+    RecyclerView chatsWrapper;
     ProgressBar progressBar;
-    List<LinearLayout> chatContainers;
-    List<ImageView> receiverAvatars;
-    List<LinearLayout> chatInfoContainers;
-    List<TextView> receiverNames;
-    List<TextView> lastMessages;
+    ChatAdapter chatAdapter;
 
     // Firebase variable
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -46,17 +46,34 @@ public class Chat extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        chatsWrapper = (LinearLayout) findViewById(R.id.chatsWrapper);
+        chatsWrapper = (RecyclerView) findViewById(R.id.chatsWrapperView);
+        chatsWrapper.setHasFixedSize(true);
+        chatsWrapper.setLayoutManager(new LinearLayoutManager(this));
+
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         // Get chats from firebase
         receiversCollection = db.collection("messages").document(currentUserID).collection("receivers");
-        receiversCollection.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                List<DocumentSnapshot> chats = task.getResult().getDocuments();
+        Query q = receiversCollection.orderBy("timestamp", Query.Direction.DESCENDING);
+        FirestoreRecyclerOptions<ChatModel> options = new FirestoreRecyclerOptions.Builder<ChatModel>().setQuery(q, ChatModel.class).build();
 
-                displayChats(chats);
+        chatAdapter = new ChatAdapter(options);
+        chatsWrapper.setAdapter(chatAdapter);
+
+        progressBar.setVisibility(View.GONE);
+
+        chatAdapter.setOnClickListener(new ChatAdapter.onClickListener() {
+            @Override
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+                String id = documentSnapshot.getId();
+                String name = (String) documentSnapshot.get("name");
+                String url = (String) documentSnapshot.get("url");
+
+                Intent intent = new Intent(Chat.this, Message.class);
+                intent.putExtra("Id", id);
+                intent.putExtra("Name", name);
+                intent.putExtra("Url", url);
+                startActivity(intent);
             }
         });
 
@@ -94,101 +111,15 @@ public class Chat extends AppCompatActivity {
         });
     }
 
-    private void displayChats(List<DocumentSnapshot> chats) {
-        chatsWrapper.removeAllViews();
-        chatContainers = new ArrayList<LinearLayout>();
-        receiverAvatars = new ArrayList<ImageView>();
-        chatInfoContainers = new ArrayList<LinearLayout>();
-        receiverNames = new ArrayList<TextView>();
-        lastMessages = new ArrayList<TextView>();
-
-        progressBar.setVisibility(View.VISIBLE);
-
-        // Loop the chats
-        for(int i = 0; i < chats.size(); i++) {
-            final String receiverId = chats.get(i).getId();
-            final String lastMessageString = (String) chats.get(i).get("lastMessage");
-            final String name = (String) chats.get(i).get("name");
-            final String url = (String) chats.get(i).get("url");
-            final int index = i;
-
-            // Declare all the views required
-            LinearLayout chatContainer = new LinearLayout(Chat.this);
-            ImageView receiverAvatar = new ImageView(Chat.this);
-            LinearLayout chatInfoContainer = new LinearLayout(Chat.this);
-            TextView receiverName = new TextView(Chat.this);
-            TextView lastMessage = new TextView(Chat.this);
-
-
-            // chatContainer LinearLayout set attributes
-            chatContainer.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            chatContainer.setBackgroundResource(R.drawable.border_bottom);
-            chatContainer.setPadding(convertToSP(10), convertToSP(10), convertToSP(10), convertToSP(10));
-
-
-            // receiverAvatar ImageView set attributes
-            Picasso.get().load(url).into(receiverAvatar);
-            LinearLayout.LayoutParams avatarImageViewParams = new LinearLayout.LayoutParams(convertToSP(60), convertToSP(60));
-            avatarImageViewParams.setMargins(0, 0, convertToSP(10), 0);
-            receiverAvatar.setLayoutParams(avatarImageViewParams);
-            receiverAvatar.setScaleType(ImageView.ScaleType.CENTER_CROP);
-
-
-            // chatInfoContainer LinearLayout set attributes
-            chatInfoContainer.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
-            chatInfoContainer.setOrientation(LinearLayout.VERTICAL);
-
-
-            // receiverName TextView set attributes
-            LinearLayout.LayoutParams nameTextViewParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            nameTextViewParams.setMargins(0, 0, 0, convertToSP(5));
-            receiverName.setText(name);
-            receiverName.setTextSize(20);
-            receiverName.setTypeface(null, Typeface.BOLD);
-            receiverName.setLayoutParams(nameTextViewParams);
-
-
-            // lastMessage TextView set attributes
-            lastMessage.setText(lastMessageString);
-            lastMessage.setTextSize(16);
-            lastMessage.setMaxLines(1);
-            lastMessage.setEllipsize(TextUtils.TruncateAt.END);
-
-
-            // Add the views to the List
-            chatContainers.add(chatContainer);
-            receiverAvatars.add(receiverAvatar);
-            chatInfoContainers.add(chatInfoContainer);
-            receiverNames.add(receiverName);
-            lastMessages.add(lastMessage);
-
-            // Display all the views
-            System.out.println("Displaying for " + (index + 1) + " times");
-            System.out.println("Index : " + index);
-            System.out.println("Chats size ");
-            chatInfoContainers.get(index).addView(receiverNames.get(index));
-            chatInfoContainers.get(index).addView(lastMessages.get(index));
-            chatContainers.get(index).addView(receiverAvatars.get(index));
-            chatContainers.get(index).addView(chatInfoContainers.get(index));
-            chatsWrapper.addView(chatContainers.get(index));
-
-            chatContainers.get(index).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(Chat.this, Message.class);
-                    intent.putExtra("Id", receiverId);
-                    intent.putExtra("Name", name);
-                    intent.putExtra("Url", url);
-                    startActivity(intent);
-                }
-            });
-        }
-
-        progressBar.setVisibility(View.GONE);
+    @Override
+    protected void onStart(){
+        super.onStart();
+        chatAdapter.startListening();
     }
 
-    private int convertToSP(int px) {
-        float scale = getResources().getDisplayMetrics().scaledDensity;
-        return (int) (px * scale);
+    @Override
+    protected void onStop(){
+        super.onStop();
+        chatAdapter.stopListening();
     }
 }
