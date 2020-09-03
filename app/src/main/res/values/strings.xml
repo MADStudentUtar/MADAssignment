@@ -1,4 +1,13 @@
 <resources>
+    <string name="title_activity_lyrics_display">LyricsDisplay</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="app_name">Karaokie!</string>
     <string name="song">Song</string>
     <string name="friends">Friends</string>
@@ -6,7 +15,6 @@
     <string name="profile">Profile</string>
     <string name="title">Title</string>
     <string name="sub_title">Sub Title</string>
-    <string name="todo">TODO</string>
     <string name="desc">f r o m\nT E A M M A D</string>
     <string name="song_list">Song List</string>
     <string name="song_upload">Song Upload</string>
@@ -16,4 +24,7 @@
     <string name="no_file_selected">No file selected</string>
     <string name="browse">Browse</string>
     <string name="search_songs">Search Songs</string>
+    <string name="recorded_songs">Recorded Songs</string>
+    <string name="there_is_no_recorded_audio_ngo_for_karaoke_now">There is no recorded audio.\nGo for Karaoke now!</string>
+    <string name="todo">TODO</string>
 </resources>
