@@ -5,18 +5,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;;
 
@@ -24,12 +22,11 @@ public class SearchFriend extends AppCompatActivity {
 
     private ImageButton searchFriendButton;
     private EditText searchFriendText;
+    private RecyclerView searchFriendList;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference friendRef = db.collection("user");
-    private RecyclerView searchFriendList;
-
-    private  FirestoreRecyclerAdapter adapter;
+    private FriendAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +65,6 @@ public class SearchFriend extends AppCompatActivity {
         //query
         Query query = friendRef.orderBy("name")
                 .startAt(searchFriendInput).endAt(searchFriendInput + "\uf8ff");
-//        Query query = friendRef.orderBy("name", Query.Direction.ASCENDING);
 
         //recyclerOption
         FirestoreRecyclerOptions<FindFriend> options = new FirestoreRecyclerOptions.Builder<FindFriend>()
@@ -76,35 +72,34 @@ public class SearchFriend extends AppCompatActivity {
                 .build();
 
         //recyclerAdapter
-        adapter = new FirestoreRecyclerAdapter<FindFriend, SearchFriend.SearchFriendViewHolder>(options) {
-            @NonNull
-            @Override
-            public SearchFriend.SearchFriendViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_search_friend, parent, false);
-                return new SearchFriend.SearchFriendViewHolder(view);
-            }
+        adapter = new FriendAdapter(options);
 
-            @Override
-            protected void onBindViewHolder(@NonNull SearchFriend.SearchFriendViewHolder holder, int position, @NonNull FindFriend model) {
-                holder.friendName.setText(model.getName());
-                holder.friendBio.setText(model.getBio());
-                holder.friendImageView.setImageResource(R.mipmap.ic_launcher);
-            }
-        };
         searchFriendList.setAdapter(adapter);
-    }
+        adapter.startListening();
 
-    public static class SearchFriendViewHolder extends RecyclerView.ViewHolder{
+        adapter.setOnClickListener(new FriendAdapter.onClickListener() {
+            @Override
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+                FindFriend findFriend = documentSnapshot.toObject(FindFriend.class);
 
-        private ImageView friendImageView;
-        private TextView friendName, friendBio;
+                String id = documentSnapshot.getId();
+                String name = documentSnapshot.get("name").toString();
+                String bio = documentSnapshot.get("bio").toString();
+                String url = documentSnapshot.get("url").toString();
+                String birthdate = documentSnapshot.get("birthdate").toString();
+                String favouritesong = documentSnapshot.get("favouritesong").toString();
 
-        public SearchFriendViewHolder(@NonNull View itemView) {
-            super(itemView);
+                Intent intent = new Intent(SearchFriend.this, Profile.class);
 
-            friendImageView = itemView.findViewById(R.id.friendImageView);
-            friendName = itemView.findViewById(R.id.friendNameTV);
-            friendBio = itemView.findViewById(R.id.friendBioTV);
-        }
+                intent.putExtra("Id", id);
+                intent.putExtra("Name", name);
+                intent.putExtra("Bio", bio);
+                intent.putExtra("Url", url);
+                intent.putExtra("Birthdate", birthdate);
+                intent.putExtra("Favouritesong", favouritesong);
+
+                startActivityForResult(intent,1);
+            }
+        });
     }
 }
