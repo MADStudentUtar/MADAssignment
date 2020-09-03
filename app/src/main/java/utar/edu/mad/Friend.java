@@ -24,7 +24,6 @@ import static utar.edu.mad.R.menu.menu_friend;
 public class Friend extends AppCompatActivity{
 
     RecyclerView recyclerView;
-//    BubbleScrollBar bubbleScrollBar;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference friendRef = db.collection("user");
@@ -82,8 +81,8 @@ public class Friend extends AppCompatActivity{
                         finish();
                         return true;
                     case R.id.chat:
-//                        startActivity(new Intent(Friend.this, Chat.class));
-//                        overridePendingTransition(0,0);
+                        startActivity(new Intent(Friend.this, Chat.class));
+                        overridePendingTransition(0,0);
                         return true;
                     case R.id.profile:
                         startActivity(new Intent(Friend.this, ShowProfile.class));
@@ -114,22 +113,12 @@ public class Friend extends AppCompatActivity{
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
-        //BubbleScroll
-//        bubbleScrollBar = (BubbleScrollBar) findViewById(R.id.bubble_scroll);
-//        bubbleScrollBar.attachToRecyclerView(recyclerView);
-//        bubbleScrollBar.setBubbleTextProvider(new BubbleTextProvider() {
-//            @Override
-//            public String provideBubbleText(int i) {
-//                return adapter.getItem(i).getName();
-//            }
-//        });
-
         adapter.setOnClickListener(new FriendAdapter.onClickListener() {
             @Override
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
                 FindFriend findFriend = documentSnapshot.toObject(FindFriend.class);
 
-                String id = documentSnapshot.getId().toString();
+                String id = documentSnapshot.getId();
                 String name = documentSnapshot.get("name").toString();
                 String bio = documentSnapshot.get("bio").toString();
                 String url = documentSnapshot.get("url").toString();

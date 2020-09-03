@@ -7,6 +7,7 @@
     android:orientation="vertical"
     tools:context=".Message">
 
+
     <android.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,8 +17,8 @@
 
         <ImageView
             android:id="@+id/backButton"
-            android:layout_width="30sp"
-            android:layout_height="30sp"
+            android:layout_width="20sp"
+            android:layout_height="20sp"
             android:layout_marginRight="30sp"
             android:src="@drawable/back_icon" />
 
@@ -25,8 +26,8 @@
             android:id="@+id/friendNameView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="hi"
-            android:textSize="30sp" />
+            android:textSize="24sp"
+            android:textStyle="bold"/>
 
     </android.widget.Toolbar>
 

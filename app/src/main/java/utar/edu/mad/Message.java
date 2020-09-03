@@ -94,6 +94,23 @@ public class Message extends AppCompatActivity {
                 displayMessageHistory(messages);
             }
         });
+
+        // add firestore update listener
+        q.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    System.err.println("Listen failed: " + error);
+                    return;
+                }
+
+                if (value != null) {
+                    displayMessageHistory(value.getDocuments());
+                } else {
+                    System.out.print("Current data: null");
+                }
+            }
+        });
         // ----- Handle Display Message History End ----- //
 
 
@@ -127,7 +144,6 @@ public class Message extends AppCompatActivity {
                 messageDocData.put("message", messageString);
                 messageDocData.put("sender", true);
                 messageDocData.put("timestamp", new Date());
-
                 senderCollection.add(messageDocData);
 
                 messageDocData.put("sender", false);
@@ -136,7 +152,12 @@ public class Message extends AppCompatActivity {
                 Map<String, Object> updateLastMessage = new HashMap<>();
                 updateLastMessage.put("lastMessage", messageString);
                 updateLastMessage.put("timestamp", new Date());
+                updateLastMessage.put("name", friendName);
+                updateLastMessage.put("url", friendAvatarUrl);
                 senderDocument.set(updateLastMessage, SetOptions.merge());
+
+                updateLastMessage.put("name", "Placeholder name");
+                updateLastMessage.put("url", "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/1024px-Circle-icons-profile.svg.png");
                 receiverDocument.set(updateLastMessage, SetOptions.merge());
             }
         });
@@ -150,22 +171,6 @@ public class Message extends AppCompatActivity {
                 int keypadHeight = screenHeight - r.bottom;
                 if (keypadHeight > screenHeight * 0.15) {
                     scrollToBottom();
-                }
-            }
-        });
-
-        q.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                if (error != null) {
-                    System.err.println("Listen failed: " + error);
-                    return;
-                }
-
-                if (value != null) {
-                    displayMessageHistory(value.getDocuments());
-                } else {
-                    System.out.print("Current data: null");
                 }
             }
         });

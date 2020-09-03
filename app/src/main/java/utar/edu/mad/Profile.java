@@ -52,7 +52,7 @@ public class Profile extends AppCompatActivity {
         chatBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent profileIntent = new Intent(Profile.this, Chat.class);
+                Intent profileIntent = new Intent(Profile.this, Message.class);
                 profileIntent.putExtra("Id", IdP);
                 profileIntent.putExtra("Name", NameP);
                 profileIntent.putExtra("Url", UrlP);

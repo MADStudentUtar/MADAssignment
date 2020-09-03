@@ -21,38 +21,17 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="681dp"
+        android:layout_height="match_parent"
         android:layout_marginTop="50dp"
         android:layout_marginBottom="50dp"
         android:padding="5dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/contacts_recycler"
-            android:layout_width="401dp"
-            android:layout_height="558dp"
-            android:layout_marginBottom="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:padding="4dp"
             android:scrollbars="vertical" />
-
-        <!--        <com.trendyol.bubblescrollbarlib.BubbleScrollBar-->
-        <!--            android:id="@+id/bubble_scroll" -->
-        <!--            android:layout_width="399dp"-->
-        <!--            android:layout_height="567dp"-->
-        <!--            android:layout_marginTop="50dp"-->
-        <!--            android:layout_marginBottom="50dp"-->
-        <!--            android:padding="4dp"-->
-        <!--            android:orientation="vertical"-->
-        <!--            app:bubbleBackground="@drawable/my_scroll"-->
-        <!--            app:bubbleElevation="6dp"-->
-        <!--            app:bubbleHeight="50dp"-->
-        <!--            app:bubbleMargin="4dp"-->
-        <!--            app:bubbleMinWidth="50dp"-->
-        <!--            app:bubblePadding="4dp"-->
-        <!--            app:bubbleTextColor="@android:color/white"-->
-        <!--            app:bubbleTextSize="8sp"-->
-        <!--            app:scrollbarBackground="@color/white"-->
-        <!--            app:thumbBackground="@color/colorTheme">-->
-        <!--        </com.trendyol.bubblescrollbarlib.BubbleScrollBar>-->
 
     </FrameLayout>
 
