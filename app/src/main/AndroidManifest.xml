@@ -3,9 +3,6 @@
     package="utar.edu.mad">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
@@ -23,8 +20,6 @@
         <activity
             android:name=".Profile"
             android:parentActivityName=".Friend" />
-        <activity android:name=".RecordeAudio"/>
-        <activity android:name=".LyricsDisplay" />
         <activity android:name=".Chat" />
         <activity android:name=".Friend" />
         <activity android:name=".SongList" />
@@ -44,6 +39,6 @@
         <activity
             android:name=".login"
             android:theme="@style/Login" />
-    </application>
 
+    </application>
 </manifest>
