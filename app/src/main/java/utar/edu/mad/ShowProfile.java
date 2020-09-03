@@ -39,9 +39,6 @@ public class ShowProfile extends AppCompatActivity {
 
     String currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +59,6 @@ public class ShowProfile extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(ShowProfile.this,UpdateUser.class);
                 startActivity(intent);
-
             }
         });
 
@@ -100,9 +96,10 @@ public class ShowProfile extends AppCompatActivity {
                         finish();
                         return true;
                     case R.id.chat:
-//                        startActivity(new Intent(getApplicationContext(), ));
-//                        overridePendingTransition(0,0);
-//                        return true;
+                        startActivity(new Intent(ShowProfile.this, Chat.class));
+                        overridePendingTransition(0,0);
+                        finish();
+                        return true;
                     case R.id.profile:
                         return true;
                 }

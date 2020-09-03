@@ -146,9 +146,7 @@ public class UpdateUser extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                         Toast.makeText(UpdateUser.this, "Profile Updated", Toast.LENGTH_SHORT).show();
-                                        Intent intent = new Intent(UpdateUser.this,ShowProfile.class);
-                                        startActivity(intent);
-
+                                        finish();
                                     }
                                 })
                                         .addOnFailureListener(new OnFailureListener() {
@@ -175,7 +173,6 @@ public class UpdateUser extends AppCompatActivity {
                 public Void apply(Transaction transaction) throws FirebaseFirestoreException {
                     DocumentSnapshot snapshot = transaction.get(sfDocRef);
 
-
                     //transaction.update(sfDocRef, "population", newPopulation);
                     transaction.update(sfDocRef,"name",name);
                     transaction.update(sfDocRef,"bio",bio);
@@ -189,8 +186,7 @@ public class UpdateUser extends AppCompatActivity {
                 @Override
                 public void onSuccess(Void aVoid) {
                     Toast.makeText(UpdateUser.this, "Profile Updated", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(UpdateUser.this,ShowProfile.class);
-                    startActivity(intent);
+                    finish();
                 }
             })
                     .addOnFailureListener(new OnFailureListener() {
