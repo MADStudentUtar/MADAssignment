@@ -155,7 +155,7 @@ public class SongUpload extends AppCompatActivity {
 
                 final StorageReference storageReference1 = storageReference.child(System.currentTimeMillis() + "." + getfileextension(audioUri));
                 storageTask = storageReference1.putFile(audioUri);
-                Task<Uri> urlTask = storageTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                Task urlTask = storageTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                     @Override
                     public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
                         if (!task.isSuccessful()) {

@@ -23,6 +23,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
+
 public class SongList extends AppCompatActivity implements FirestoreAdapter.OnListItemClick {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     DocumentReference documentReference;
@@ -132,8 +136,32 @@ public class SongList extends AppCompatActivity implements FirestoreAdapter.OnLi
     // click on the item on recyclerView
     @Override
     public void onItemClick(DocumentSnapshot snapshot, int position) {
-        Log.d("ITEM_CLICK", "Clicked an item:" + position);
-        Log.d("Reference", String.valueOf(snapshot.getData()));
+//        Log.d("ITEM_CLICK", "Clicked an item:" + position);
+//        Log.d("Reference", String.valueOf(snapshot.getData()));
+        Map<String, Object> list = snapshot.getData();
+
+        ArrayList<String> key = new ArrayList<>();
+
+        Iterator iterator = list.keySet().iterator();
+        while(iterator.hasNext()){
+             key.add(iterator.next().toString());
+        }
+
+        String song_img = key.get(0);
+        String karaoke = key.get(1);
+        String song_title = key.get(2);
+        String artist = key.get(3);
+        String lyrics = key.get(4);
+        String songURL = key.get(5);
+
+//        Intent intent = new Intent(SongList.this,);
+//        intent.putExtra("song_img", (String)list.get(song_img));
+//        intent.putExtra("karaoke", (String)list.get(karaoke));
+//        intent.putExtra("song_title", (String)list.get(song_title));
+//        intent.putExtra("artist", (String)list.get(artist));
+//        intent.putExtra("lyrics", (String)list.get(lyrics));
+//        intent.putExtra("songURL", (String)list.get(songURL));
+//        startActivity(intent);
 
     }
 }
