@@ -52,7 +52,7 @@ public class SearchFriend extends AppCompatActivity {
             @Override
             public void onClick(View view)
             {
-                String searchFriendInput = searchFriendText.getText().toString();
+                String searchFriendInput = searchFriendText.getText().toString().toLowerCase();
                 searchFriend(searchFriendInput);
             }
         });
@@ -63,7 +63,7 @@ public class SearchFriend extends AppCompatActivity {
         Toast.makeText(this, "Searching...", Toast.LENGTH_LONG).show();
 
         //query
-        Query query = friendRef.orderBy("name")
+        Query query = friendRef.orderBy("searchName")
                 .startAt(searchFriendInput).endAt(searchFriendInput + "\uf8ff");
 
         //recyclerOption

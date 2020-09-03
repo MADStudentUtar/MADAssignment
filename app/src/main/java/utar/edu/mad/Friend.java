@@ -96,7 +96,7 @@ public class Friend extends AppCompatActivity{
     private void setUpRecyclerView(){
 
         //query
-        final Query query = friendRef.orderBy("name", Query.Direction.ASCENDING);
+        final Query query = friendRef.orderBy("searchName", Query.Direction.ASCENDING);
 
         //recyclerOption
         FirestoreRecyclerOptions<FindFriend> options = new FirestoreRecyclerOptions.Builder<FindFriend>()
@@ -118,10 +118,10 @@ public class Friend extends AppCompatActivity{
 
                 String id = documentSnapshot.getId();
                 String name = documentSnapshot.get("name").toString();
-                String bio = documentSnapshot.get("bio").toString();
-                String url = documentSnapshot.get("url").toString();
-                String birthdate = documentSnapshot.get("birthdate").toString();
-                String favouritesong = documentSnapshot.get("favouritesong").toString();
+                String bio = documentSnapshot.get("bio") != null ? documentSnapshot.get("bio").toString() : "";
+                String url = documentSnapshot.get("url") != null ? documentSnapshot.get("url").toString() : "";
+                String birthdate = documentSnapshot.get("birthdate") != null ? documentSnapshot.get("birthdate").toString() : "";
+                String favouritesong = documentSnapshot.get("favouritesong") != null ? documentSnapshot.get("favouritesong").toString() : "";
 
                 Intent intent = new Intent(Friend.this, Profile.class);
 
