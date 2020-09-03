@@ -9,4 +9,5 @@
     <color name="colorGray">#DCDCDC</color>
     <color name="white">#FFFFFF</color>
     <color name="scrollBackground">#ACE5FF</color>
+    <color name="colorRedDelete">#FF3333</color>
 </resources>
