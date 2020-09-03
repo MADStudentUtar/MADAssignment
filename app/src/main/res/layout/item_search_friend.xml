@@ -34,7 +34,7 @@
         app:layout_constraintTop_toTopOf="@+id/friendImageView" />
 
     <TextView
-        android:id="@+id/bioTV"
+        android:id="@+id/friendBioTV"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
