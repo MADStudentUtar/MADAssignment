@@ -81,6 +81,7 @@ public class Friend extends AppCompatActivity{
                     case R.id.chat:
                         startActivity(new Intent(Friend.this, Chat.class));
                         overridePendingTransition(0,0);
+                        finish();
                         return true;
                     case R.id.profile:
                         startActivity(new Intent(Friend.this, ShowProfile.class));

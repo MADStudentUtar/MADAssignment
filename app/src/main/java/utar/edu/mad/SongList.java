@@ -183,14 +183,14 @@ public class SongList extends AppCompatActivity implements FirestoreAdapter.OnLi
         }
 
 
-//        Intent intent = new Intent(SongList.this,);
-//        intent.putExtra("artist", artist);
-//        intent.putExtra("karaoke", karaoke);
-//        intent.putExtra("lyrics", lyrics);
-//        intent.putExtra("song_img", song_img);
-//        intent.putExtra("song_url", song_url);
-//        intent.putExtra("song_title", song_title);
-//        startActivity(intent);
+        Intent intent = new Intent(SongList.this, LyricsDisplay.class);
+        intent.putExtra("artist", artist);
+        intent.putExtra("karaoke", karaoke);
+        intent.putExtra("lyrics", lyrics);
+        intent.putExtra("song_img", song_img);
+        intent.putExtra("song_url", song_url);
+        intent.putExtra("song_title", song_title);
+        startActivity(intent);
 
     }
 

@@ -37,7 +37,7 @@ public class RecordeAudio extends AppCompatActivity {
 
     ListView recordList;
 
-    ArrayAdapter<String> adapter;
+    MyAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +101,7 @@ public class RecordeAudio extends AppCompatActivity {
                 filepath.add(f.getAbsolutePath());
             }
         }
+        else return;
     }
 
     class MyAdapter extends ArrayAdapter<String> {

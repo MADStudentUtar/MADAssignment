@@ -90,13 +90,13 @@ public class LyricsDisplay extends AppCompatActivity {
         ActivityCompat.requestPermissions(this, permissions, 200);
 
         //getting parameter
-        //songURL = this.getIntent().getStringExtra("song_url");
-        //karaokeURL = this.getIntent().getStringExtra("karaoke");
-        //songTitle = this.getIntent().getStringExtra("song_title");
-        //artist = this.getIntent().getStringExtra("artist");
-        //lyricsURL = this.getIntent().getStringExtra("lyrics");
-        //songImgURL = this.getIntent().getStringExtra("song_img");
-        //recordsFlag = this.getIntent().getBooleanExtra("records", false);
+        songURL = this.getIntent().getStringExtra("song_url");
+        karaokeURL = this.getIntent().getStringExtra("karaoke");
+        songTitle = this.getIntent().getStringExtra("song_title");
+        artist = this.getIntent().getStringExtra("artist");
+        lyricsURL = this.getIntent().getStringExtra("lyrics");
+        songImgURL = this.getIntent().getStringExtra("song_img");
+        recordsFlag = this.getIntent().getBooleanExtra("records", false);
 
 
         //setup screen bg with artist
@@ -126,13 +126,15 @@ public class LyricsDisplay extends AppCompatActivity {
             if(recordsFlag)
                 song.setDataSource("file://" + songURL);
             //online
-            else
+            else {
                 song.setDataSource(songURL);
+                karaoke.setDataSource(karaokeURL);
+                karaoke.prepare();
+            }
 
             song.prepare();
 
-            karaoke.setDataSource(karaokeURL);
-            karaoke.prepare();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -186,8 +188,14 @@ public class LyricsDisplay extends AppCompatActivity {
                 //add time tag into arraylist
                 time.add(line.split(timeRegex)[0]);
 
-                //add lyrics to arraylist
-                lyrics.add(line.split(timeRegex)[1]);
+                TextView tv = new TextView(this);
+
+                tv.setGravity(Gravity.CENTER);
+                tv.setTextSize(16);
+                tv.setTextColor(Color.WHITE);
+                tv.setText(line.split(timeRegex)[1]);
+
+                lyricsDisplay.addView(tv);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -210,18 +218,6 @@ public class LyricsDisplay extends AppCompatActivity {
             }
         }).start();
 
-        //generate lyrics display
-        for (int i = 0; i < lyrics.size(); i++) {
-            TextView tv = new TextView(this);
-
-            tv.setGravity(Gravity.CENTER);
-            tv.setTextSize(16);
-            tv.setTextColor(Color.WHITE);
-            tv.setText(lyrics.get(i));
-
-            lyricsDisplay.addView(tv);
-        }
-
         //play the song
         song.start();
 
@@ -243,7 +239,10 @@ public class LyricsDisplay extends AppCompatActivity {
         findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onBackPressed();
+                song.release();
+                song = null;
+                karaoke.release();
+                finish();
             }
         });
     }
