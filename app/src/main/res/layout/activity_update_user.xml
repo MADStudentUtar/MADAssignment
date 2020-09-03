@@ -40,7 +40,7 @@
             android:layout_height="match_parent"
             android:clickable="true"
             android:onClick="ChooseImage"
-            android:scaleType="fitCenter" />
+            android:scaleType="centerCrop" />
     </androidx.cardview.widget.CardView>
 
     <EditText
@@ -50,7 +50,7 @@
         android:hint="Username"
         android:inputType="text"
         android:textColor="@android:color/white"
-        android:textColorHint="@android:color/white"
+        android:textColorHint="#99ffffff"
         android:layout_margin="4dp"
         android:id="@+id/et_name_uu"
         android:drawableLeft="@drawable/ic_baseline_person_24"
@@ -65,7 +65,7 @@
         android:hint="Bio"
         android:inputType="text"
         android:textColor="@android:color/white"
-        android:textColorHint="@android:color/white"
+        android:textColorHint="#99ffffff"
         android:layout_margin="4dp"
         android:id="@+id/et_bio_uu"
         android:drawableLeft="@drawable/ic_bio_24"
@@ -79,7 +79,7 @@
         android:hint="Birth Date"
         android:inputType="text"
         android:textColor="@android:color/white"
-        android:textColorHint="@android:color/white"
+        android:textColorHint="#99ffffff"
         android:layout_margin="4dp"
         android:id="@+id/et_birthdate_uu"
         android:drawableLeft="@drawable/ic_birthdaycake_24"
@@ -93,7 +93,7 @@
         android:hint="Favourite Song"
         android:inputType="text"
         android:textColor="@android:color/white"
-        android:textColorHint="@android:color/white"
+        android:textColorHint="#99ffffff"
         android:layout_margin="4dp"
         android:id="@+id/et_favouritesong_uu"
         android:drawableLeft="@drawable/ic_baseline_music_note_24"

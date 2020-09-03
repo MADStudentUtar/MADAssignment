@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -40,7 +41,7 @@ public class CreateProfile extends AppCompatActivity {
     EditText et_name, et_bio, et_birthdate, et_favouritesong;
     Button button;
     ProgressBar progressBar;
-    private Uri imageUri;
+    private Uri imageUri = null;
     private static final int PICK_IMAGE = 1;
     UploadTask uploadTask;
     FirebaseStorage firebaseStorage;
@@ -50,11 +51,17 @@ public class CreateProfile extends AppCompatActivity {
     DocumentReference documentReference;
     ImageView imageView;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
+    SharedPreferences profileSP;
+    SharedPreferences.Editor profileEditor;
+    String defaultUrl = "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_profile);
+
+        profileSP = getSharedPreferences("profile", MODE_PRIVATE);
+        profileEditor = profileSP.edit();
 
         et_name = findViewById(R.id.et_name_cp);
         et_bio = findViewById(R.id.et_bio_cp);
@@ -63,6 +70,8 @@ public class CreateProfile extends AppCompatActivity {
         button = findViewById(R.id.btn_cp);
         progressBar = findViewById(R.id.progressbar_cp);
         imageView = findViewById(R.id.iv_cp);
+
+        Picasso.get().load(defaultUrl).into(imageView);
 
         documentReference = db.collection("user").document(currentUserID);
         storageReference = firebaseStorage.getInstance().getReference("profile images");
@@ -85,9 +94,9 @@ public class CreateProfile extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == PICK_IMAGE || resultCode == RESULT_OK || data != null || data.getData() != null){
-            imageUri = data.getData();
 
+        if(requestCode == PICK_IMAGE && resultCode == RESULT_OK && data != null && data.getData() != null){
+            imageUri = data.getData();
             Picasso.get().load(imageUri).into(imageView);
         }
     }
@@ -104,97 +113,128 @@ public class CreateProfile extends AppCompatActivity {
         final String birthdate = et_birthdate.getText().toString();
         final String favouritesong = et_favouritesong.getText().toString();
 
-        if(!TextUtils.isEmpty(name) &&!TextUtils.isEmpty(bio) &&!TextUtils.isEmpty(birthdate) &&!TextUtils.isEmpty(favouritesong) && imageUri != null){
+        if(!TextUtils.isEmpty(name)){
             progressBar.setVisibility(View.VISIBLE);
-            final StorageReference reference = storageReference.child(System.currentTimeMillis()+"."+getFileExt(imageUri));
 
-            uploadTask = reference.putFile(imageUri);
+            if(imageUri == null) {
+                Map<String, String> profile_details = new HashMap<>();
+                profile_details.put("name", name);
+                profile_details.put("searchName", name.toLowerCase());
+                profile_details.put("url", defaultUrl);
 
-            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot,Task<Uri>>(){
-                @Override
-                public Task<Uri> then (@NonNull Task<UploadTask.TaskSnapshot>task) throws Exception{
-                    if(!task.isSuccessful()){
-                        throw task.getException();
-                    }
-                    return reference.getDownloadUrl();
+                profileEditor.putString("name", name);
+                profileEditor.putString("url", defaultUrl);
+
+                if(!TextUtils.isEmpty(bio)) {
+                    profile_details.put("bio", bio);
+                    profileEditor.putString("bio", bio);
                 }
-            })
-                    .addOnCompleteListener(new OnCompleteListener<Uri>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Uri> task) {
-                            if(task.isSuccessful()){
-                                Uri downloadUri = task.getResult();
-                                Map<String, String> profile_details = new HashMap<>();
-                                profile_details.put("name",name);
-                                profile_details.put("bio",bio);
-                                profile_details.put("birthdate",birthdate);
-                                profile_details.put("favouritesong",favouritesong);
-                                profile_details.put("url",downloadUri.toString());
 
-                                documentReference.set(profile_details)
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                progressBar.setVisibility(View.INVISIBLE);
-                                                Toast.makeText(CreateProfile.this, "Profile Created", Toast.LENGTH_SHORT).show();
-                                                Intent intent = new Intent(CreateProfile.this,ShowProfile.class);
-                                                startActivity(intent);
+                if(!TextUtils.isEmpty(birthdate)) {
+                    profile_details.put("birthdate", birthdate);
+                    profileEditor.putString("birthdate", birthdate);
+                }
 
-                                            }
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Toast.makeText(CreateProfile.this, "failed", Toast.LENGTH_SHORT).show();
+                if(!TextUtils.isEmpty(favouritesong)) {
+                    profile_details.put("favouritesong", favouritesong);
+                    profileEditor.putString("favouritesong", favouritesong);
+                }
 
-                                            }
-                                        });
-                            }
+                profileEditor.commit();
 
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-
-                        }
-                    });
-        }else {
-            Toast.makeText(this, "All Fields Required!", Toast.LENGTH_SHORT).show();
-        }
-
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        documentReference.get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                documentReference.set(profile_details)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if(task.getResult().exists()){
-                            String name_result = task.getResult().getString("name");
-                            String bio_result = task.getResult().getString("bio");
-                            String birthdate_result = task.getResult().getString("birthdate");
-                            String favouritesong_result = task.getResult().getString("favouritesong");
-                            String Url = task.getResult().getString("url");
-
-                            Picasso.get().load(Url).into(imageView);
-                            et_name.setText(name_result);
-                            et_bio.setText(bio_result);
-                            et_birthdate.setText(birthdate_result);
-                            et_favouritesong.setText(favouritesong_result);
-
-                        }else{
-                            Toast.makeText(CreateProfile.this, "No Profile Exist", Toast.LENGTH_SHORT).show();
-                        }
+                    public void onSuccess(Void aVoid) {
+                        progressBar.setVisibility(View.INVISIBLE);
+                        Toast.makeText(CreateProfile.this, "Profile Created", Toast.LENGTH_SHORT).show();
+                        finish();
+                        return;
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-
+                        Toast.makeText(CreateProfile.this, "failed", Toast.LENGTH_SHORT).show();
+                        return;
                     }
                 });
+            }
+            else {
+                final StorageReference reference = storageReference.child(System.currentTimeMillis() + "." + getFileExt(imageUri));
+
+                uploadTask = reference.putFile(imageUri);
+
+                Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                    @Override
+                    public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                        if (!task.isSuccessful()) {
+                            throw task.getException();
+                        }
+                        return reference.getDownloadUrl();
+                    }
+                })
+                        .addOnCompleteListener(new OnCompleteListener<Uri>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Uri> task) {
+                                if (task.isSuccessful()) {
+                                    Uri downloadUri = task.getResult();
+                                    Map<String, String> profile_details = new HashMap<>();
+                                    profile_details.put("name", name);
+                                    profile_details.put("searchName", name.toLowerCase());
+                                    profile_details.put("url", downloadUri.toString());
+
+                                    profileEditor.putString("name", name);
+                                    profileEditor.putString("url", downloadUri.toString());
+
+                                    if(!TextUtils.isEmpty(bio)) {
+                                        profile_details.put("bio", bio);
+                                        profileEditor.putString("bio", bio);
+                                    }
+
+                                    if(!TextUtils.isEmpty(birthdate)) {
+                                        profile_details.put("birthdate", birthdate);
+                                        profileEditor.putString("birthdate", birthdate);
+                                    }
+
+                                    if(!TextUtils.isEmpty(favouritesong)) {
+                                        profile_details.put("favouritesong", favouritesong);
+                                        profileEditor.putString("favouritesong", favouritesong);
+                                    }
+
+                                    profileEditor.commit();
+
+                                    documentReference.set(profile_details)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            progressBar.setVisibility(View.INVISIBLE);
+                                            Toast.makeText(CreateProfile.this, "Profile Created", Toast.LENGTH_SHORT).show();
+                                            finish();
+                                            return;
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(CreateProfile.this, "failed", Toast.LENGTH_SHORT).show();
+                                            return;
+                                        }
+                                    });
+                                }
+
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                System.out.println("Failed");
+                                e.printStackTrace();
+                            }
+                        });
+            }
+        } else {
+            Toast.makeText(this, "Username field is required!", Toast.LENGTH_SHORT).show();
+        }
     }
 }

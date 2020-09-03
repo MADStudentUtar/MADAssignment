@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -22,6 +23,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class login extends AppCompatActivity {
     private EditText loginEmailtext;
@@ -32,10 +35,17 @@ public class login extends AppCompatActivity {
     private ProgressBar progressBar;
     private CheckBox checkBox;
 
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    SharedPreferences profileSP;
+    SharedPreferences.Editor profileEditor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        profileSP = getSharedPreferences("profile", MODE_PRIVATE);
+        profileEditor = profileSP.edit();
 
         mAuth = FirebaseAuth.getInstance();
          loginEmailtext = findViewById(R.id.login_email);
@@ -58,7 +68,33 @@ public class login extends AppCompatActivity {
                           @Override
                           public void onComplete(@NonNull Task<AuthResult> task) {
                               if (task.isSuccessful()){
-                                  sendtoMain();
+                                  String currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                                  db.collection("user").document(currentUserID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                      @Override
+                                      public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                          if(task.getResult().exists()){
+
+                                              String name_result = task.getResult().getString("name");
+                                              String bio_result = task.getResult().getString("bio");
+                                              String birthdate_result = task.getResult().getString("birthdate");
+                                              String favouritesong_result = task.getResult().getString("favouritesong");
+                                              String Url = task.getResult().getString("url");
+
+                                              profileEditor.putString("name", name_result);
+                                              profileEditor.putString("bio", bio_result);
+                                              profileEditor.putString("birthdate", birthdate_result);
+                                              profileEditor.putString("favouritesong", favouritesong_result);
+                                              profileEditor.putString("url", Url);
+                                              profileEditor.commit();
+
+                                              sendtoMain();
+                                          } else{
+                                              Intent intent = new Intent(login.this, ShowProfile.class);
+                                              startActivity(intent);
+                                          }
+                                      }
+                                  });
                               }else{
                                   String error = task.getException().getMessage();
                                   Toast.makeText(getApplicationContext(),"Error :" + error,Toast.LENGTH_LONG).show();
@@ -84,6 +120,7 @@ public class login extends AppCompatActivity {
              public void onClick(View view) {
                  Intent intent = new Intent(login.this,Register.class);
                  startActivity(intent);
+                 finish();
              }
          });
     }

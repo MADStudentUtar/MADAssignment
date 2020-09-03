@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -48,6 +49,11 @@ public class Message extends AppCompatActivity {
     ImageView sendButton;
     Query q;
 
+    SharedPreferences profileSP;
+    String defaultUrl = "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png";
+    String currentUsername;
+    String currentUrl;
+
     // Intent variable
     String friendId;
     String friendName;
@@ -65,6 +71,10 @@ public class Message extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
+
+        profileSP = getSharedPreferences("profile", MODE_PRIVATE);
+        currentUsername = profileSP.getString("name", "Username");
+        currentUrl = profileSP.getString("url", defaultUrl);
 
         // Get required intent
         friendId = this.getIntent().getStringExtra("Id");
@@ -124,7 +134,6 @@ public class Message extends AppCompatActivity {
         });
 
 
-
         // Send Message Button Handler
         sendButton = (ImageView) findViewById(R.id.sendButton);
         messageToSend = (EditText) findViewById(R.id.messageToSend);
@@ -156,8 +165,8 @@ public class Message extends AppCompatActivity {
                 updateLastMessage.put("url", friendAvatarUrl);
                 senderDocument.set(updateLastMessage, SetOptions.merge());
 
-                updateLastMessage.put("name", "Placeholder name");
-                updateLastMessage.put("url", "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/1024px-Circle-icons-profile.svg.png");
+                updateLastMessage.put("name", currentUsername);
+                updateLastMessage.put("url", currentUrl);
                 receiverDocument.set(updateLastMessage, SetOptions.merge());
             }
         });
@@ -227,7 +236,7 @@ public class Message extends AppCompatActivity {
             // Setup and display the layout if currentUser is sender
             if (sender) {
                 // Load the avatar url into ImageView
-                Picasso.get().load("https://i.kym-cdn.com/photos/images/original/001/168/825/826.jpg").into(avatar);
+                Picasso.get().load(currentUrl).into(avatar);
 
                 // Set the attributes for message TextView
                 messageTV.setTextColor(Color.BLACK);

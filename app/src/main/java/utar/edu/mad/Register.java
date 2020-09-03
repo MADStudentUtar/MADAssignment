@@ -110,6 +110,7 @@ public class Register extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(Register.this,login.class);
                 startActivity(intent);
+                finish();
             }
         });
     }
@@ -126,7 +127,7 @@ public class Register extends AppCompatActivity {
 
     }
     private void sendtoMain(){
-        Intent intent = new Intent(Register.this,SongList.class);
+        Intent intent = new Intent(Register.this, ShowProfile.class);
         startActivity(intent);
         finish();
     }

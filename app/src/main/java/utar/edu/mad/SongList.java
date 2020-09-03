@@ -92,29 +92,16 @@ public class SongList extends AppCompatActivity implements FirestoreAdapter.OnLi
                     case R.id.chat:
                         startActivity(new Intent(SongList.this, Chat.class));
                         overridePendingTransition(0,0);
+                        finish();
                         return true;
                     case R.id.profile:
-                        ShowProfile();
+                        startActivity(new Intent(SongList.this, ShowProfile.class));
+                        finish();
                         return true;
                 }
                 return false;
             }
         });
-    }
-    public void ShowProfile(){
-        documentReference.get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if(task.getResult().exists()){
-                            Intent intent = new Intent(SongList.this,ShowProfile.class);
-                            startActivity(intent);
-                        }else{
-                            Intent intent = new Intent(SongList.this,CreateProfile.class);
-                            startActivity(intent);
-                        }
-                    }
-                });
     }
 
 
