@@ -271,6 +271,15 @@ public class LyricsDisplay extends AppCompatActivity {
         }
     };
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        song.release();
+        song = null;
+        karaoke.release();
+        finish();
+    }
+
     public String createTimeLabel(int time) {
         String timeLabel = "";
         int min = time / 1000 / 60;
