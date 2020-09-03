@@ -7,7 +7,8 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    android:background="@drawable/loginback">
+    android:background="@drawable/loginback"
+    android:padding="20sp">
 
     <TextView
         android:layout_width="match_parent"
@@ -22,46 +23,47 @@
 
 
     <EditText
-        android:layout_width="380dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@android:color/white"
         android:hint="User Email"
         android:inputType="textEmailAddress"
         android:textColor="@android:color/white"
-        android:textColorHint="@android:color/white"
+        android:textColorHint="@color/placeholder"
         android:id="@+id/register_email"/>
     <EditText
-        android:layout_width="380dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@android:color/white"
         android:hint="Password"
         android:inputType="textPassword"
         android:layout_marginTop="10dp"
         android:textColor="@android:color/white"
-        android:textColorHint="@android:color/white"
+        android:textColorHint="@color/placeholder"
         android:id="@+id/register_password"/>
     <EditText
-        android:layout_width="380dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@android:color/white"
         android:hint="Comfirm Password"
         android:inputType="textPassword"
         android:layout_marginTop="10dp"
         android:textColor="@android:color/white"
-        android:textColorHint="@android:color/white"
+        android:textColorHint="@color/placeholder"
         android:id="@+id/register_confirm_password"/>
 
     <CheckBox
-        android:layout_width="200dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Show Password"
         android:buttonTint="@android:color/white"
         android:textColor="@android:color/white"
-        android:layout_marginRight="70dp"
+        android:layout_marginLeft="20sp"
+        android:layout_gravity="left"
         android:id="@+id/register_checkbox" />
 
     <Button
-        android:layout_width="380dp"
+        android:layout_width="match_parent"
         android:layout_height="40dp"
         android:background="#0076FF"
         android:textColor="@android:color/white"
@@ -70,7 +72,7 @@
         android:id="@+id/register_button"/>
 
     <Button
-        android:layout_width="380dp"
+        android:layout_width="match_parent"
         android:layout_height="40dp"
         android:background="#4D0076FF"
         android:textColor="@android:color/white"

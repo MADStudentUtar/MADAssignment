@@ -10,4 +10,5 @@
     <color name="white">#FFFFFF</color>
     <color name="scrollBackground">#ACE5FF</color>
     <color name="colorRedDelete">#FF3333</color>
+    <color name="placeholder">#99ffffff</color>
 </resources>

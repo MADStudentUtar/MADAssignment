@@ -7,7 +7,9 @@
     android:orientation="vertical"
     android:gravity="center"
     android:background="@drawable/loginback"
-    tools:context=".CreateProfile">
+    tools:context=".CreateProfile"
+    android:padding="20sp">
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -36,13 +38,13 @@
     </androidx.cardview.widget.CardView>
 
     <EditText
-        android:layout_width="380dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@android:color/white"
         android:hint="Username"
         android:inputType="text"
         android:textColor="@android:color/white"
-        android:textColorHint="#99ffffff"
+        android:textColorHint="@color/placeholder"
         android:layout_margin="4dp"
         android:id="@+id/et_name_cp"
         android:drawableLeft="@drawable/ic_baseline_person_24"
@@ -51,13 +53,13 @@
         android:drawablePadding="5dp"/>
 
     <EditText
-        android:layout_width="380dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@android:color/white"
         android:hint="Bio"
         android:inputType="text"
         android:textColor="@android:color/white"
-        android:textColorHint="#99ffffff"
+        android:textColorHint="@color/placeholder"
         android:layout_margin="4dp"
         android:id="@+id/et_bio_cp"
         android:drawableLeft="@drawable/ic_bio_24"
@@ -65,13 +67,13 @@
         android:paddingLeft="5dp"
         android:drawablePadding="5dp"/>
     <EditText
-        android:layout_width="380dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@android:color/white"
         android:hint="Birth Date"
         android:inputType="text"
         android:textColor="@android:color/white"
-        android:textColorHint="#99ffffff"
+        android:textColorHint="@color/placeholder"
         android:layout_margin="4dp"
         android:id="@+id/et_birthdate_cp"
         android:drawableLeft="@drawable/ic_birthdaycake_24"
@@ -79,13 +81,13 @@
         android:paddingLeft="5dp"
         android:drawablePadding="5dp"/>
     <EditText
-        android:layout_width="380dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@android:color/white"
         android:hint="Favourite Song"
         android:inputType="text"
         android:textColor="@android:color/white"
-        android:textColorHint="#99ffffff"
+        android:textColorHint="@color/placeholder"
         android:layout_margin="4dp"
         android:id="@+id/et_favouritesong_cp"
         android:drawableLeft="@drawable/ic_baseline_music_note_24"
@@ -95,7 +97,7 @@
 
     <Button
         android:id="@+id/btn_cp"
-        android:layout_width="380dp"
+        android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="20dp"
         android:background="#0076FF"

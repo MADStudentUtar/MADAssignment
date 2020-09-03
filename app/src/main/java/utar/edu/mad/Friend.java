@@ -16,7 +16,6 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.trendyol.bubblescrollbarlib.BubbleScrollBar;
 
 import static utar.edu.mad.R.menu.menu_friend;
 
