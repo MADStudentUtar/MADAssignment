@@ -36,7 +36,7 @@ public class SearchFriend extends AppCompatActivity {
         //toolbar
         Toolbar toolbar = findViewById(R.id.searchFriendToolbar);
         setSupportActionBar(toolbar);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Search Friend");
 
         //recyclerView

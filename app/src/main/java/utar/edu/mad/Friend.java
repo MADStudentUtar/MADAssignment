@@ -42,7 +42,6 @@ public class Friend extends AppCompatActivity{
             case R.id.search:
                 startActivity(new Intent(Friend.this, SearchFriend.class));
                 overridePendingTransition(0, 0);
-                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

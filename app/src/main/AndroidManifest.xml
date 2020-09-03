@@ -14,7 +14,9 @@
         android:theme="@style/AppTheme">
         <activity android:name=".Message"></activity>
         <activity android:name=".SongUpload"></activity>
-        <activity android:name=".SearchFriend" />
+        <activity
+            android:name=".SearchFriend"
+            android:parentActivityName=".Friend"/>
         <activity
             android:name=".Profile"
             android:parentActivityName=".Friend" />

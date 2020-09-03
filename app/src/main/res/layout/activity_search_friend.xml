@@ -29,7 +29,8 @@
             android:background="@color/white"
             android:ems="10"
             android:hint="Search Friend Name"
-            android:inputType="textMultiLine"
+            android:inputType="text"
+            android:maxLines="1"
             android:padding="10dp"
             android:textColor="@color/colorBlack" />
 
