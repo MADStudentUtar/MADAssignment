@@ -101,6 +101,8 @@ public class RecordeAudio extends AppCompatActivity {
                 filepath.add(f.getAbsolutePath());
             }
         }
+        else
+            return;
     }
 
     class MyAdapter extends ArrayAdapter<String> {

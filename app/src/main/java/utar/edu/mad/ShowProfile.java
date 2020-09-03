@@ -109,7 +109,7 @@ public class ShowProfile extends AppCompatActivity {
         findViewById(R.id.recordedSong).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(ShowProfile.this, LyricsDisplay.class));
+                startActivity(new Intent(ShowProfile.this, RecordeAudio.class));
             }
         });
     }
