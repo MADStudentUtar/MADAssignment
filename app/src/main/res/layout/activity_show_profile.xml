@@ -196,7 +196,7 @@
         android:layout_marginRight="10sp"
         android:layout_marginBottom="10sp"
         android:backgroundTint="#0076FF"
-        android:src="@drawable/ic_baseline_edit_24" />
+        android:src="@drawable/edit" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav"

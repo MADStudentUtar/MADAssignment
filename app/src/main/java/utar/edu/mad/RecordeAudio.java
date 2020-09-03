@@ -57,7 +57,7 @@ public class RecordeAudio extends AppCompatActivity {
         } else
             getMusic();
 
-        MyAdapter adapter = new MyAdapter(this, title, description);
+        adapter = new MyAdapter(this, title, description);
         recordList = findViewById(R.id.recordedList);
         recordList.setAdapter(adapter);
         recordList.setEmptyView(findViewById(R.id.emptyText));

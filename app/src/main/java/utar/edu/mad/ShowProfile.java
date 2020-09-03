@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -34,7 +35,7 @@ public class ShowProfile extends AppCompatActivity {
     DocumentReference documentReference;
     ImageView imageView;
     TextView nameEt, bioEt, birthdateEt, favouritesongEt;
-    Button edit;
+    FloatingActionButton floatingActionButton;
     private FirebaseAuth mAuth;
 
     String currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -60,7 +61,7 @@ public class ShowProfile extends AppCompatActivity {
         birthdateEt = findViewById(R.id.birthdate_tv_sp);
         favouritesongEt = findViewById(R.id.favouritesong_tv_sp);
 
-        edit.setOnClickListener(new View.OnClickListener() {
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ShowProfile.this,UpdateUser.class);
@@ -115,10 +116,10 @@ public class ShowProfile extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.recordedSong).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.recordedButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(ShowProfile.this, LyricsDisplay.class));
+                startActivity(new Intent(ShowProfile.this, RecordeAudio.class));
             }
         });
     }
