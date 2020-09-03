@@ -67,17 +67,16 @@ public class LyricsDisplay extends AppCompatActivity {
     ArrayList<String> lyrics;
 
     String fileName = null;
-    String[] permissions = {android.Manifest.permission.RECORD_AUDIO, android.Manifest.permission.READ_EXTERNAL_STORAGE,
-            android.Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    String[] permissions = {android.Manifest.permission.RECORD_AUDIO, android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
-    //Future intent
-    String lyricsURL = "https://firebasestorage.googleapis.com/v0/b/karaokie-7aaa8.appspot.com/o/lyrics%2FHow%20You%20Like%20That.txt?alt=media&token=c2b18528-627c-46d4-9fe5-1136a60e3cba";
-    String songImgURL = "https://firebasestorage.googleapis.com/v0/b/karaokie-7aaa8.appspot.com/o/songsImg%2FJay%20Chou.jpg?alt=media&token=f9747d8e-068a-4444-96c2-0b7bf5dc4ddf";
-    String songURL = "https://firebasestorage.googleapis.com/v0/b/karaokie-7aaa8.appspot.com/o/songs%2FJust%20the%20Way%20You%20Are.mp3?alt=media&token=68b243a4-d91d-4869-a115-57b32d869bfb";
-    String karaokeURL = "https://firebasestorage.googleapis.com/v0/b/karaokie-7aaa8.appspot.com/o/songs%2FJust%20the%20Way%20You%20Are%20-%20Karaoke%20ver.mp3?alt=media&token=f480e4ac-93ee-4347-8c2e-4d675df889c5";
-    String songTitle = "Just The Way You Are";
-    String artist = "Bruno Mars";
-    boolean records = false;
+    //initialization
+    String lyricsURL = "";
+    String songImgURL = "";
+    String songURL = "";
+    String karaokeURL = "";
+    String songTitle = "";
+    String artist = "";
+    boolean recordsFlag = false;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -92,9 +91,13 @@ public class LyricsDisplay extends AppCompatActivity {
 
         //getting parameter
         //songURL = this.getIntent().getStringExtra("song_url");
+        //karaokeURL = this.getIntent().getStringExtra("karaoke");
         //songTitle = this.getIntent().getStringExtra("song_title");
         //artist = this.getIntent().getStringExtra("artist");
-        //records = this.getIntent().getBooleanExtra("records", false);
+        //lyricsURL = this.getIntent().getStringExtra("lyrics");
+        //songImgURL = this.getIntent().getStringExtra("song_img");
+        //recordsFlag = this.getIntent().getBooleanExtra("records", false);
+
 
         //setup screen bg with artist
         Bitmap artistBg = getBitmapFromURL(songImgURL);
@@ -105,6 +108,7 @@ public class LyricsDisplay extends AppCompatActivity {
         //set music info display
         songTitleLabel = findViewById(R.id.songTitle);
         songTitleLabel.setText(songTitle);
+
         artistLabel = findViewById(R.id.artist);
         artistLabel.setText(artist);
 
@@ -118,12 +122,15 @@ public class LyricsDisplay extends AppCompatActivity {
         karaoke = new MediaPlayer();
 
         try {
-            if(records)
+            //local
+            if(recordsFlag)
                 song.setDataSource("file://" + songURL);
+            //online
             else
                 song.setDataSource(songURL);
 
             song.prepare();
+
             karaoke.setDataSource(karaokeURL);
             karaoke.prepare();
         } catch (IOException e) {
@@ -224,7 +231,13 @@ public class LyricsDisplay extends AppCompatActivity {
 
         fileName = getExternalCacheDir().getAbsolutePath() + File.separator;
         fileName += format.format(cur);
-        fileName += ".mp4";
+        fileName += ".3gp";
+
+        //disable button if playing recorded song
+        if(recordsFlag){
+            findViewById(R.id.record).setEnabled(false);
+            findViewById(R.id.source).setEnabled(false);
+        }
 
         //exit player
         findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
@@ -350,7 +363,7 @@ public class LyricsDisplay extends AppCompatActivity {
         recorder = new MediaRecorder();
         recorder.reset();
         recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
         recorder.setOutputFile(fileName);
         recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
 
