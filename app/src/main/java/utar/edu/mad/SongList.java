@@ -1,22 +1,26 @@
 package utar.edu.mad;
 
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -27,10 +31,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
+
 public class SongList extends AppCompatActivity implements FirestoreAdapter.OnListItemClick {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     DocumentReference documentReference;
-    Button searchBtn;
 
     private RecyclerView firestoreList;
     private FirestoreAdapter adapter;
@@ -48,7 +53,7 @@ public class SongList extends AppCompatActivity implements FirestoreAdapter.OnLi
         documentReference = db.collection("user").document(currentUserID);
 
         //Query songs from firebase
-        Query querySong = db.collection("user").document(currentUserID).collection("songs");
+        Query querySong = db.collection("songs").document(currentUserID).collection("songs_details");
 
         //RecyclerOptions
         FirestoreRecyclerOptions<SongModel> options = new FirestoreRecyclerOptions.Builder<SongModel>()
@@ -59,8 +64,36 @@ public class SongList extends AppCompatActivity implements FirestoreAdapter.OnLi
         firestoreList.setLayoutManager(new LinearLayoutManager(this));
         firestoreList.setAdapter(adapter);
 
-        //search button
-        searchBtn = findViewById(R.id.searchBtn);
+        //swipe to delete
+        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                if (direction == ItemTouchHelper.LEFT) {
+
+                    FirestoreAdapter.SongsViewHolder songsViewHolder = (FirestoreAdapter.SongsViewHolder) viewHolder;
+                    songsViewHolder.deleteItem();
+                }
+
+            }
+
+            @Override
+            public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                        .addBackgroundColor(ContextCompat.getColor(SongList.this, R.color.colorRedDelete))
+                        .addActionIcon(R.drawable.ic_baseline_delete_24)
+                        .create()
+                        .decorate();
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+            }
+        };
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(firestoreList);
 
         //floating upload button
         FloatingActionButton fab = findViewById(R.id.btn);
@@ -136,8 +169,7 @@ public class SongList extends AppCompatActivity implements FirestoreAdapter.OnLi
     // click on the item on recyclerView
     @Override
     public void onItemClick(DocumentSnapshot snapshot, int position) {
-//        Log.d("ITEM_CLICK", "Clicked an item:" + position);
-//        Log.d("Reference", String.valueOf(snapshot.getData()));
+        String artist = "", karaoke = "", lyrics = "", song_img = "", song_url = "", song_title ="";
         Map<String, Object> list = snapshot.getData();
 
         ArrayList<String> key = new ArrayList<>();
@@ -147,21 +179,53 @@ public class SongList extends AppCompatActivity implements FirestoreAdapter.OnLi
              key.add(iterator.next().toString());
         }
 
-        String song_img = key.get(0);
-        String karaoke = key.get(1);
-        String song_title = key.get(2);
-        String artist = key.get(3);
-        String lyrics = key.get(4);
-        String songURL = key.get(5);
+        for(int i = 0; i < key.size(); i++) {
+            if (key.get(i).equals("artist")){
+                artist = (String) list.get(key.get(i));
+            } else if (key.get(i).equals("karaoke")) {
+                karaoke = (String) list.get(key.get(i));
+            } else if (key.get(i).equals("lyrics")) {
+                lyrics = (String) list.get(key.get(i));
+            } else if (key.get(i).equals("song_img")) {
+                song_img = (String) list.get(key.get(i));
+            } else if (key.get(i).equals("song_url")) {
+                song_url = (String) list.get(key.get(i));
+            } else if (key.get(i).equals("song_title")) {
+                song_title = (String) list.get(key.get(i));
+            }
+        }
+
 
 //        Intent intent = new Intent(SongList.this,);
-//        intent.putExtra("song_img", (String)list.get(song_img));
-//        intent.putExtra("karaoke", (String)list.get(karaoke));
-//        intent.putExtra("song_title", (String)list.get(song_title));
-//        intent.putExtra("artist", (String)list.get(artist));
-//        intent.putExtra("lyrics", (String)list.get(lyrics));
-//        intent.putExtra("songURL", (String)list.get(songURL));
+//        intent.putExtra("artist", artist);
+//        intent.putExtra("karaoke", karaoke);
+//        intent.putExtra("lyrics", lyrics);
+//        intent.putExtra("song_img", song_img);
+//        intent.putExtra("song_url", song_url);
+//        intent.putExtra("song_title", song_title);
 //        startActivity(intent);
 
+    }
+
+    // delete item from RecycleView
+    @Override
+    public void handleDeleteItem(DocumentSnapshot snapshot) {
+        final DocumentReference docRef = snapshot.getReference();
+        final SongModel songModel = snapshot.toObject(SongModel.class);
+        docRef.delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("tag", "onSuccess: Item deleted");
+                    }
+                });
+
+        Snackbar.make(firestoreList, "Item deleted", Snackbar.LENGTH_LONG)
+                .setAction("Undo", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        docRef.set(songModel);
+                    }
+                }).show();
     }
 }

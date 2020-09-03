@@ -37,9 +37,9 @@ public class FirestoreAdapter extends FirestoreRecyclerAdapter<SongModel, Firest
         return new SongsViewHolder(view);
     }
 
-    public void deleteItem(int position){
-        getSnapshots().getSnapshot(position).getReference().delete();
-    }
+//    public void deleteItem(int position){
+//        getSnapshots().getSnapshot(position).getReference().delete();
+//    }
 
 
     public class SongsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -56,6 +56,10 @@ public class FirestoreAdapter extends FirestoreRecyclerAdapter<SongModel, Firest
             itemView.setOnClickListener(this);
         }
 
+        public void deleteItem() {
+            onListItemClick.handleDeleteItem(getSnapshots().getSnapshot(getAdapterPosition()));
+        }
+
         @Override
         public void onClick(View view) {
             onListItemClick.onItemClick(getSnapshots().getSnapshot(getAdapterPosition()), getAdapterPosition());
@@ -65,6 +69,7 @@ public class FirestoreAdapter extends FirestoreRecyclerAdapter<SongModel, Firest
 
     public interface OnListItemClick {
         void onItemClick(DocumentSnapshot snapshot, int position);
+        void handleDeleteItem(DocumentSnapshot snapshot);
     }
 
 }
