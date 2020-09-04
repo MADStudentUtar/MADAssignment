@@ -128,8 +128,10 @@ public class LyricsDisplay extends AppCompatActivity {
             //online
             else {
                 song.setDataSource(songURL);
-                karaoke.setDataSource(karaokeURL);
-                karaoke.prepare();
+                if(!karaokeURL.isEmpty()){
+                    karaoke.setDataSource(karaokeURL);
+                    karaoke.prepare();
+                }
             }
 
             song.prepare();
